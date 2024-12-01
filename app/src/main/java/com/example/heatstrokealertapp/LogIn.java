@@ -11,8 +11,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class LogIn extends AppCompatActivity {
-// HI
-
+    
     private EditText emailEditText;
     private EditText passwordEditText;
     private Button loginButton;
