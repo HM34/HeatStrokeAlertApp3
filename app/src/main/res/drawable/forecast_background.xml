@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <solid android:color="#B3E5FC" /> <!-- لون أزرق فاتح مميز -->
+
+
+    <corners android:radius="16dp" />
+
+
+    <stroke
+        android:width="2dp"
+        android:color="#81D4FA" /> <!-- لون أزرق غامق قليلاً -->
+
+
+    <padding
+        android:left="8dp"
+        android:right="8dp"
+        android:top="8dp"
+        android:bottom="8dp" />
+</shape>
