@@ -2,7 +2,6 @@ package com.example.heatstrokealertapp;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -241,16 +240,33 @@ public class MainActivity extends AppCompatActivity {
 
                         Forecast7Day.get7DayForecast(latitude, longitude, new Forecast7Day.WeatherDataCallback() {
 
+                            // Inside your activity or fragment class
+                            private final List<WeatherItem> weatherItems = new ArrayList<>(); // Declare this at the class level
+
                             @Override
                             public void onSuccess(String date, double tempMin, double tempMax, int humidity) {
-                                // Create a new list or array to hold your forecast data
-                                List<WeatherItem> weatherItems = new ArrayList<>();
-                                weatherItems.add(new WeatherItem(date, tempMin, tempMax, humidity,"res/drawable/danger.png"));
+                                // Add new weather item to the list
+                                weatherItems.add(new WeatherItem(date, tempMin, tempMax, humidity, "res/drawable/danger.png"));
 
-                                // Set up the adapter
+                                Collections.reverse(weatherItems);
+
+                                // Update the adapter after all items are added
                                 WeatherAdapter weatherAdapter = new WeatherAdapter(weatherItems);
-                                recyclerView.setAdapter(weatherAdapter);
+                                recyclerView.setAdapter(weatherAdapter);  // Set the adapter to the RecyclerView
                             }
+
+                            @Override
+                            public void onSuccess(String date, double tempMin, double tempMax, int humidity, String icon) {
+                                // Add new weather item to the list
+                                weatherItems.add(new WeatherItem(date, tempMin, tempMax, humidity, "res/drawable/danger.png"));
+
+                                // Update the adapter after all items are added
+                                if (weatherItems.size() == 7) { // If 7 days of data are added
+                                    WeatherAdapter weatherAdapter = new WeatherAdapter(weatherItems);
+                                    recyclerView.setAdapter(weatherAdapter);  // Set the adapter to the RecyclerView
+                                }
+                            }
+
 
                             @Override
                             public void onError(String error) {

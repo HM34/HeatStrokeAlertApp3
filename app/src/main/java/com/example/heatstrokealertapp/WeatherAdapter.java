@@ -35,17 +35,15 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.WeatherV
     public void onBindViewHolder(@NonNull WeatherViewHolder holder, int position) {
         WeatherItem weatherItem = forecastList.get(position);
 
-        // Set the date
+        // Set the data for each item in the list
         holder.dateText.setText(weatherItem.getDate());
-
-        // Set temperature range
         holder.MaxTemperatureText.setText(weatherItem.getTempMax() + "°C");
         holder.MinTemperatureText.setText(weatherItem.getTempMin() + "°C");
 
-//        // Optionally load the weather icon
-//        String iconUrl = "https://openweathermap.org/img/wn/" + weatherItem.getIcon() + "@2x.png";
-//        Picasso.get().load(iconUrl).into(holder.weatherIcon);
+        // You can also load the icon with Picasso or Glide
+//        Picasso.get().load(weatherItem.getIcon()).into(holder.weatherIcon);
     }
+
 
     @Override
     public int getItemCount() {

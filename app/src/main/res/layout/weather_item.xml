@@ -12,20 +12,20 @@
         android:id="@+id/ForecastDateText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="60dp"
         android:gravity="center"
-        android:text="sep_13"
+        android:padding="5dp"
+        android:text="Sep_12"
         android:textColor="#003366"
-        android:textSize="20sp"
+        android:textSize="16sp"
         android:textStyle="bold" />
 
     <!-- Weather Icon ImageView -->
     <ImageView
         android:id="@+id/weatherIcon"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="60dp"
+        android:layout_height="match_parent"
         android:contentDescription="Weather Icon"
+        android:padding="5dp"
         android:src="@drawable/caution" />
 
     <!-- Temperature TextView -->
@@ -40,23 +40,20 @@
             android:id="@+id/MaxTemperatureText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
             android:gravity="center"
             android:text="38°"
             android:textColor="#003366"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/MinTemperatureText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
             android:gravity="center"
             android:text="38°"
             android:textColor="#003366"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:textStyle="bold" />
     </LinearLayout>
 

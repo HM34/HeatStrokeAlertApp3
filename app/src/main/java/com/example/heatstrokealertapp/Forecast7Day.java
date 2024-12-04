@@ -7,6 +7,8 @@ import org.json.JSONObject;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Forecast7Day {
 
@@ -48,8 +50,8 @@ public class Forecast7Day {
                         // Extract the 'list' array from the response
                         JSONArray forecastArray = jsonResponse.getJSONArray("list");
 
-                        // Use a map to store data for each day
-                        JSONObject dailyData = new JSONObject();
+                        // Create a list to store the weather items for each day
+                        Map<String, JSONObject> dailyData = new HashMap<>();
 
                         // Loop through the forecast list
                         for (int i = 0; i < forecastArray.length(); i++) {
@@ -57,7 +59,7 @@ public class Forecast7Day {
 
                             // Extract timestamp and convert to readable date
                             long timestamp = forecast.getLong("dt");
-                            String date = new java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault())
+                            String date = new java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.US)
                                     .format(new java.util.Date(timestamp * 1000)); // Convert to milliseconds
 
                             // Extract temperature and humidity data
@@ -66,33 +68,32 @@ public class Forecast7Day {
                             int humidity = forecast.getJSONObject("main").getInt("humidity");
 
                             // Store daily data in the map, update if necessary
-                            if (!dailyData.has(date)) {
+                            if (!dailyData.containsKey(date)) {
                                 JSONObject dailyForecast = new JSONObject();
                                 dailyForecast.put("temp_min", tempMin);
                                 dailyForecast.put("temp_max", tempMax);
                                 dailyForecast.put("humidity", humidity);
                                 dailyData.put(date, dailyForecast);
                             } else {
-                                JSONObject dailyForecast = dailyData.getJSONObject(date);
+                                JSONObject dailyForecast = dailyData.get(date);
                                 dailyForecast.put("temp_min", Math.min(dailyForecast.getDouble("temp_min"), tempMin));
                                 dailyForecast.put("temp_max", Math.max(dailyForecast.getDouble("temp_max"), tempMax));
                                 dailyForecast.put("humidity", Math.max(dailyForecast.getInt("humidity"), humidity));
                             }
                         }
 
-                        // Send back the processed data to the callback
-                        for (int i = 0; i < dailyData.names().length(); i++) {
-                            String date = dailyData.names().getString(i);
-                            JSONObject dailyForecast = dailyData.getJSONObject(date);
+                        // Send back the processed data to the callback for each day
+                        for (String date : dailyData.keySet()) {
+                            JSONObject dailyForecast = dailyData.get(date);
                             callback.onSuccess(date, dailyForecast.getDouble("temp_min"),
                                     dailyForecast.getDouble("temp_max"),
                                     dailyForecast.getInt("humidity"));
                         }
-
                     } catch (Exception e) {
                         e.printStackTrace();
                         callback.onError("Failed to parse data");
                     }
+
                 } else {
                     callback.onError("Failed to fetch data");
                 }
@@ -103,6 +104,9 @@ public class Forecast7Day {
     // Interface for callback
     public interface WeatherDataCallback {
         void onSuccess(String date, double tempMin, double tempMax, int humidity); // Only necessary data
+
+        void onSuccess(String date, double tempMin, double tempMax, int humidity, String icon);
+
         void onError(String error);
     }
 }
