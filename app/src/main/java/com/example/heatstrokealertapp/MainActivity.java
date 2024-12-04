@@ -1,6 +1,7 @@
 package com.example.heatstrokealertapp;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -13,8 +14,8 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.widget.TextView;
 import android.widget.Toast;
-
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,20 +29,48 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
+
+
+
+    // Declare views at class level to make them accessible in the callback
+    private TextView cityNameTextView, tMinMaxTextView, FeelsLikeTempTextView, HumidityTextView,
+            VisibilityTextView, PressureTextTextView, SunriseTextView, SunSetTextView,
+            WindDegTextView, WindSpeedTextView, TimeZoneTextView, DewPointTextView;
+
+    // Global cityName variable
+    private String cityName = "";
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
 
     // FusedLocationProviderClient instance
     private FusedLocationProviderClient fusedLocationClient;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Initialize the views
+        cityNameTextView = findViewById(R.id.CityName);
+        tMinMaxTextView = findViewById(R.id.TMinMax);
+        FeelsLikeTempTextView = findViewById(R.id.FeelsLikeTemp);
+        HumidityTextView = findViewById(R.id.HumidityText);
+        DewPointTextView = findViewById(R.id.DewPointText);
+
+        VisibilityTextView = findViewById(R.id.VisibiltyText);
+        PressureTextTextView = findViewById(R.id.PressureText);
+        SunriseTextView = findViewById(R.id.SunriseText);
+        SunSetTextView = findViewById(R.id.SunSetText);
+        WindDegTextView = findViewById(R.id.WindDegText);
+        WindSpeedTextView = findViewById(R.id.WindSpeedText);
+        TimeZoneTextView = findViewById(R.id.TimeZoneText);
 
         // Initialize FusedLocationProviderClient
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
@@ -57,6 +86,8 @@ public class MainActivity extends AppCompatActivity {
             // Permission already granted, proceed to get location
             getUserLocation();
         }
+
+
     }
 
     // Handle the result of the permission request
@@ -70,9 +101,6 @@ public class MainActivity extends AppCompatActivity {
                 getUserLocation();
             } else {
                 // Permission denied, show a message or handle accordingly
-                Toast.makeText(this, "Location permission is required to access location", Toast.LENGTH_SHORT).show();
-
-                // Optionally, send the user to settings to manually grant permission
                 Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
                         Uri.parse("package:" + getPackageName()));
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -81,7 +109,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // Get the user's current location
     // Get the user's current location
     private void getUserLocation() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -94,84 +121,155 @@ public class MainActivity extends AppCompatActivity {
                     if (location != null) {
                         double latitude = location.getLatitude();
                         double longitude = location.getLongitude();
-                        Toast.makeText(MainActivity.this, "Location: " + latitude + ", " + longitude, Toast.LENGTH_LONG).show();
 
                         // Now, get the city name using reverse geocoding
                         getCityNameFromLocation(latitude, longitude);
                     } else {
-                        // If FusedLocationProviderClient fails to get location, fall back to LocationManager
-                        Toast.makeText(MainActivity.this, "Unable to get location from FusedLocationProvider. Trying LocationManager.", Toast.LENGTH_SHORT).show();
                         getLocationUsingLocationManager();
                     }
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    // If FusedLocationProviderClient fails completely
-                    Toast.makeText(MainActivity.this, "Failed to get location: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     getLocationUsingLocationManager(); // Fallback to LocationManager
                 }
             });
-        } else {
-            Toast.makeText(this, "Permission denied, cannot get location.", Toast.LENGTH_SHORT).show();
         }
     }
 
     private void getLocationUsingLocationManager() {
-        // Use LocationManager as a fallback
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (locationManager != null) {
+            // Check if location services are enabled
+            boolean isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+
+            if (!isGpsEnabled && !isNetworkEnabled) {
+                Toast.makeText(this, "Location services are disabled. Please enable them in settings.", Toast.LENGTH_SHORT).show();
+                return; // Exit if no provider is available
+            }
+
             try {
                 // Use the best provider (GPS or Network)
                 String provider = locationManager.getBestProvider(new Criteria(), true);
+
                 if (provider != null) {
+                    // Request single location update from the selected provider
                     locationManager.requestSingleUpdate(provider, new LocationListener() {
                         @Override
                         public void onLocationChanged(@NonNull Location location) {
                             if (location != null) {
                                 double latitude = location.getLatitude();
                                 double longitude = location.getLongitude();
-                                Toast.makeText(MainActivity.this, "Location (from LocationManager): " + latitude + ", " + longitude, Toast.LENGTH_LONG).show();
-
-                                // Now, get the city name using reverse geocoding
-                                getCityNameFromLocation(latitude, longitude);
+                                getCityNameFromLocation(latitude, longitude); // Call geocoder to get city
                             }
                         }
 
                         @Override
-                        public void onStatusChanged(String provider, int status, Bundle extras) {}
+                        public void onStatusChanged(String provider, int status, Bundle extras) {
+                        }
 
                         @Override
-                        public void onProviderEnabled(@NonNull String provider) {}
+                        public void onProviderEnabled(@NonNull String provider) {
+                        }
 
                         @Override
-                        public void onProviderDisabled(@NonNull String provider) {}
-                    }, null); // Here, no need for a Looper, as it's just a one-time update
-                } else {
-                    Toast.makeText(MainActivity.this, "No suitable provider found.", Toast.LENGTH_SHORT).show();
+                        public void onProviderDisabled(@NonNull String provider) {
+                            // Handle case if the provider is disabled
+                        }
+                    }, null); // No need for Looper in this case (single update)
                 }
             } catch (SecurityException e) {
-                Toast.makeText(MainActivity.this, "Permission denied for LocationManager.", Toast.LENGTH_SHORT).show();
+                // Handle security exception
+                Toast.makeText(this, "Location permission is required.", Toast.LENGTH_SHORT).show();
             }
         }
     }
-
 
     // Get the city name from latitude and longitude using reverse geocoding
-
     private void getCityNameFromLocation(double latitude, double longitude) {
         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-        try {
-            List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
-            if (addresses != null && !addresses.isEmpty()) {
-                String cityName = addresses.get(0).getLocality();
-                Toast.makeText(MainActivity.this, "City: " + cityName, Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(MainActivity.this, "Unable to get city name.", Toast.LENGTH_SHORT).show();
+        new Thread(() -> {
+            try {
+                List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
+                if (addresses != null && !addresses.isEmpty()) {
+                    cityName = addresses.get(0).getLocality(); // Update the global cityName variable
+                    runOnUiThread(() -> {
+                        cityNameTextView.setText(cityName);
+
+                        // Example cityName, replace with actual from API
+                        WeatherApi.getWeatherData(cityName, new WeatherApi.WeatherDataCallback() {
+                            @Override
+                            public void onSuccess(String weatherDescription, String weatherMain, double temp, double feelsLike, double tempMin,
+                                                  double tempMax, double pressure, int humidity, int visibility, double windSpeed, int windDeg,
+                                                  long sunrise, long sunset, int timezone) {
+                                // Format timezone to +3:00 format
+                                String formattedTimezone = formatTimezone(timezone);
+
+                                // Format sunrise and sunset to time (AM/PM)
+                                String formattedSunrise = formatTimestamp(sunrise);
+                                String formattedSunset = formatTimestamp(sunset);
+
+                                // Format visibility in meters to kilometers (optional)
+                                String formattedVisibility = String.format(Locale.US, "%.1f km", visibility / 1000.0); // Convert meters to km
+
+                                // Calculate the dew point
+                                double dewPoint = calculateDewPoint(temp, humidity);
+
+                                // Update the UI with the weather data
+                                TimeZoneTextView.setText(formattedTimezone);
+                                tMinMaxTextView.setText(String.format(Locale.US, "H:%.1f° L:%.1f° %s", tempMax, tempMin, weatherMain));
+                                FeelsLikeTempTextView.setText(feelsLike + "°C");
+                                HumidityTextView.setText(humidity + "%");
+                                DewPointTextView.setText(String.format(Locale.US, "The dew point is %.1f°C", dewPoint));
+                                VisibilityTextView.setText(formattedVisibility);
+                                PressureTextTextView.setText(pressure + " hPa");
+                                WindDegTextView.setText(windDeg + "°");
+                                WindSpeedTextView.setText(windSpeed + " m/s");
+                                SunriseTextView.setText(formattedSunrise);
+                                SunSetTextView.setText(formattedSunset);
+                            }
+
+                            @Override
+                            public void onError(String error) {
+                                Toast.makeText(MainActivity.this, "Weather API Error: " + error, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    });
+                } else {
+                    cityName = "City not found"; // Default if not found
+                    runOnUiThread(() -> {
+                        cityNameTextView.setText(cityName);
+                    });
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                cityName = "Geocoder error"; // Error message if geocoder fails
+                runOnUiThread(() -> {
+                    cityNameTextView.setText(cityName);
+                });
             }
-        } catch (IOException e) {
-            Toast.makeText(MainActivity.this, "Geocoder error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
+        }).start();
     }
+
+    // Format timezone in +3:00 format
+    private String formatTimezone(int timezoneInSeconds) {
+        int hours = timezoneInSeconds / 3600;
+        int minutes = (timezoneInSeconds % 3600) / 60;
+        return String.format(Locale.US, "%+03d:%02d", hours, minutes);
+    }
+
+    // Format a Unix timestamp to a readable time format (e.g., 5:00 AM)
+    private String formatTimestamp(long timestamp) {
+        SimpleDateFormat sdf = new SimpleDateFormat("h:mm a", Locale.US);
+        Date date = new Date(timestamp * 1000); // Convert seconds to milliseconds
+        return sdf.format(date);
+    }
+
+    // Calculate the dew point from temperature and humidity
+    private double calculateDewPoint(double temp, int humidity) {
+        return temp - ((100 - humidity) / 5.0);
+    }
+
 
 }
