@@ -223,7 +223,7 @@ public class MainActivity extends AppCompatActivity {
                                 HumidityTextView.setText(humidity + "%");
                                 DewPointTextView.setText(String.format(Locale.US, "The dew point is %.1f°C", dewPoint));
                                 VisibilityTextView.setText(formattedVisibility);
-                                PressureTextTextView.setText(pressure + " hPa");
+                                PressureTextTextView.setText(pressure + "\n   hPa");
                                 WindDegTextView.setText(windDeg + "°");
                                 WindSpeedTextView.setText(windSpeed + " m/s");
                                 SunriseTextView.setText(formattedSunrise);

@@ -627,6 +627,7 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
 
@@ -655,7 +656,7 @@
                         android:gravity="center"
                         android:text="19°"
                         android:textColor="#FFF"
-                        android:textSize="48sp" />
+                        android:textSize="34sp" />
 
 
                     <TextView
@@ -765,14 +766,6 @@
                         android:textSize="34sp" />
 
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:gravity="center"
-                        android:text="Similar to the actual temperature."
-                        android:textColor="#003366"
-                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -813,10 +806,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
-                        android:layout_weight="1"
                         android:text="8 km"
                         android:textColor="#FFF"
-                        android:textSize="34sp" />
+                        android:textSize="24sp" />
 
 
                 </LinearLayout>
@@ -871,7 +863,7 @@
                         android:gravity="center"
                         android:text="5 AM"
                         android:textColor="#FFF"
-                        android:textSize="48sp" />
+                        android:textSize="34sp" />
 
                 </LinearLayout>
 
@@ -919,7 +911,7 @@
                         android:gravity="center"
                         android:text="5 PM"
                         android:textColor="#FFF"
-                        android:textSize="48sp" />
+                        android:textSize="34sp" />
 
                 </LinearLayout>
 
@@ -963,7 +955,7 @@
                         android:gravity="center"
                         android:text="50"
                         android:textColor="#FFF"
-                        android:textSize="48sp" />
+                        android:textSize="34sp" />
 
                     <TextView
                         android:id="@+id/WindSpeedText"
@@ -980,7 +972,7 @@
                     android:layout_height="160dp"
                     android:layout_marginBottom="25dp"
                     android:background="@drawable/forecast_background"
-                    android:gravity="center_horizontal"
+                    android:gravity="center"
                     android:orientation="vertical">
 
 
@@ -989,14 +981,6 @@
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:layout_marginEnd="8dp"
-                            android:contentDescription="Rainfall Icon"
-                            android:src="@drawable/rainfull"
-                            app:tint="#003366" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -1012,10 +996,10 @@
                         android:id="@+id/TimeZoneText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="32dp"
+                        android:layout_marginTop="16dp"
                         android:text="1.8 mm"
                         android:textColor="#FFF"
-                        android:textSize="24sp" />
+                        android:textSize="34sp" />
 
 
                 </LinearLayout>
