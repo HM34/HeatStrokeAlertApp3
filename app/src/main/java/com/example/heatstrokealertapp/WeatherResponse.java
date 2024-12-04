@@ -1,16 +1,29 @@
 package com.example.heatstrokealertapp;
 
+import com.google.gson.annotations.SerializedName;
+
 public class WeatherResponse {
-    public Daily[] daily;
 
     public static class Daily {
-        public long dt; // Date in Unix time
+        @SerializedName("dt")
+        public long dt;
+        @SerializedName("temp")
         public Temp temp;
+        @SerializedName("humidity")
         public int humidity;
+        @SerializedName("weather")
+        public Weather[] weather;
 
         public static class Temp {
-            public float max;
-            public float min;
+            @SerializedName("min")
+            public double min;
+            @SerializedName("max")
+            public double max;
+        }
+
+        public static class Weather {
+            @SerializedName("icon")
+            public String icon;
         }
     }
 }

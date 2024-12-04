@@ -43,6 +43,7 @@ dependencies {
     implementation(libs.constraintlayout)
     implementation(libs.play.services.maps)
     implementation(libs.legacy.support.v4)
+    implementation(libs.recyclerview)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
@@ -50,4 +51,5 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation ("com.google.android.gms:play-services-location:18.0.0")
+    implementation ("androidx.recyclerview:recyclerview:1.2.1")
 }

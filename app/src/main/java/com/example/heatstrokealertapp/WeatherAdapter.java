@@ -1,55 +1,67 @@
 package com.example.heatstrokealertapp;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+//import com.squareup.picasso.Picasso;
+
+import java.util.List;
 
 public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.WeatherViewHolder> {
 
-    private String[] dates;
-    private float[] temperatures;
-    private int[] weatherIcons;
+    private List<WeatherItem> forecastList;
 
-    // Constructor to accept data
-    public WeatherAdapter(String[] dates, float[] temperatures, int[] weatherIcons) {
-        this.dates = dates;
-        this.temperatures = temperatures;
-        this.weatherIcons = weatherIcons;
+    public WeatherAdapter(List<WeatherItem> forecastList) {
+        this.forecastList = forecastList;
     }
 
-    // ViewHolder class to hold the views for each item
-    public static class WeatherViewHolder extends RecyclerView.ViewHolder {
-        public TextView dateText, temperatureText;
-        public ImageView weatherIcon;
-
-        public WeatherViewHolder(View itemView) {
-            super(itemView);
-            dateText = itemView.findViewById(R.id.dateText);
-            temperatureText = itemView.findViewById(R.id.temperatureText);
-            weatherIcon = itemView.findViewById(R.id.weatherIcon);
-        }
-    }
-
+    @NonNull
     @Override
-    public WeatherViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        // Inflate the item layout and create the ViewHolder
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.forecast_item, parent, false);
+    public WeatherViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        // Inflate the layout for each item in the list
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.weather_item, parent, false);
         return new WeatherViewHolder(view);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(WeatherViewHolder holder, int position) {
-        // Set the data for each item
-        holder.dateText.setText(dates[position]);
-        holder.temperatureText.setText(String.format("%s°C", temperatures[position]));
-        holder.weatherIcon.setImageResource(weatherIcons[position]); // Use your weather icon resource
+    public void onBindViewHolder(@NonNull WeatherViewHolder holder, int position) {
+        WeatherItem weatherItem = forecastList.get(position);
+
+        // Set the date
+        holder.dateText.setText(weatherItem.getDate());
+
+        // Set temperature range
+        holder.MaxTemperatureText.setText(weatherItem.getTempMax() + "°C");
+        holder.MinTemperatureText.setText(weatherItem.getTempMin() + "°C");
+
+//        // Optionally load the weather icon
+//        String iconUrl = "https://openweathermap.org/img/wn/" + weatherItem.getIcon() + "@2x.png";
+//        Picasso.get().load(iconUrl).into(holder.weatherIcon);
     }
 
     @Override
     public int getItemCount() {
-        return dates.length;  // Number of items (days in the forecast)
+        return forecastList.size();
+    }
+
+    public static class WeatherViewHolder extends RecyclerView.ViewHolder {
+        TextView dateText, MaxTemperatureText, MinTemperatureText;
+        ImageView weatherIcon;
+
+        public WeatherViewHolder(View itemView) {
+            super(itemView);
+            dateText = itemView.findViewById(R.id.ForecastDateText);
+            MaxTemperatureText = itemView.findViewById(R.id.MaxTemperatureText);
+            MinTemperatureText = itemView.findViewById(R.id.MinTemperatureText);
+            weatherIcon = itemView.findViewById(R.id.weatherIcon);
+        }
     }
 }

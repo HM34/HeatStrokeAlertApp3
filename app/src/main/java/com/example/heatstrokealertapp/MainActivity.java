@@ -2,6 +2,7 @@ package com.example.heatstrokealertapp;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -32,6 +33,8 @@ import com.google.android.gms.tasks.Task;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -39,22 +42,14 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity {
 
 
-
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     // Declare views at class level to make them accessible in the callback
-    private TextView cityNameTextView, tMinMaxTextView, FeelsLikeTempTextView, HumidityTextView,
-            VisibilityTextView, PressureTextTextView, SunriseTextView, SunSetTextView,
-            WindDegTextView, WindSpeedTextView, TimeZoneTextView, DewPointTextView;
-
+    private TextView cityNameTextView, tMinMaxTextView, FeelsLikeTempTextView, HumidityTextView, VisibilityTextView, PressureTextTextView, SunriseTextView, SunSetTextView, WindDegTextView, WindSpeedTextView, TimeZoneTextView, DewPointTextView;
     private RecyclerView recyclerView;
     private WeatherAdapter weatherAdapter;
-
-
-
+    private List<WeatherItem> weatherItems;
     // Global cityName variable
     private String cityName = "";
-
-    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
-
     // FusedLocationProviderClient instance
     private FusedLocationProviderClient fusedLocationClient;
 
@@ -79,19 +74,19 @@ public class MainActivity extends AppCompatActivity {
         WindSpeedTextView = findViewById(R.id.WindSpeedText);
         TimeZoneTextView = findViewById(R.id.TimeZoneText);
 
+        // Initialize RecyclerView
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+
 
         // Initialize FusedLocationProviderClient
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         // Check for location permission
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // Request location permission
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    LOCATION_PERMISSION_REQUEST_CODE);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
         } else {
             // Permission already granted, proceed to get location
             getUserLocation();
@@ -111,8 +106,7 @@ public class MainActivity extends AppCompatActivity {
                 getUserLocation();
             } else {
                 // Permission denied, show a message or handle accordingly
-                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                        Uri.parse("package:" + getPackageName()));
+                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + getPackageName()));
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }
@@ -210,9 +204,7 @@ public class MainActivity extends AppCompatActivity {
                         // today api call
                         WeatherApi.getWeatherData(cityName, new WeatherApi.WeatherDataCallback() {
                             @Override
-                            public void onSuccess(String weatherDescription, String weatherMain, double temp, double feelsLike, double tempMin,
-                                                  double tempMax, double pressure, int humidity, int visibility, double windSpeed, int windDeg,
-                                                  long sunrise, long sunset, int timezone) {
+                            public void onSuccess(String weatherDescription, String weatherMain, double temp, double feelsLike, double tempMin, double tempMax, double pressure, int humidity, int visibility, double windSpeed, int windDeg, long sunrise, long sunset, int timezone) {
                                 // Format timezone to +3:00 format
                                 String formattedTimezone = formatTimezone(timezone);
 
@@ -245,28 +237,28 @@ public class MainActivity extends AppCompatActivity {
                                 Toast.makeText(MainActivity.this, "Weather API Error: " + error, Toast.LENGTH_SHORT).show();
                             }
                         });
-                        // Fetch 7-day forecast
-                        WeatherApi7Day.get7DayForecast(latitude, longitude, new WeatherApi7Day.ForecastListener() {
-                            @Override
-                            public void onForecastReceived(WeatherResponse.Daily[] dailyForecast) {
-                                // Loop through the forecast data and log or display it
-                                for (WeatherResponse.Daily day : dailyForecast) {
-                                    String date = new java.text.SimpleDateFormat("yyyy-MM-dd")
-                                            .format(new java.util.Date(day.dt * 1000)); // Convert Unix time to date
-                                    float tempMax = day.temp.max;
-                                    float tempMin = day.temp.min;
-                                    int humidity = day.humidity;
 
-                                    // Log or display the data
-                                    Log.d("Weather", "Date: " + date + ", Max Temp: " + tempMax + "°C, Min Temp: " + tempMin + "°C, Humidity: " + humidity + "%");
-                                }
+
+                        Forecast7Day.get7DayForecast(latitude, longitude, new Forecast7Day.WeatherDataCallback() {
+
+                            @Override
+                            public void onSuccess(String date, double tempMin, double tempMax, int humidity) {
+                                // Create a new list or array to hold your forecast data
+                                List<WeatherItem> weatherItems = new ArrayList<>();
+                                weatherItems.add(new WeatherItem(date, tempMin, tempMax, humidity,"res/drawable/danger.png"));
+
+                                // Set up the adapter
+                                WeatherAdapter weatherAdapter = new WeatherAdapter(weatherItems);
+                                recyclerView.setAdapter(weatherAdapter);
                             }
 
                             @Override
-                            public void onFailure(String error) {
-                                Log.e("Weather", "Error: " + error);
+                            public void onError(String error) {
+                                // Handle errors if any
+                                System.out.println("Error: " + error);
                             }
                         });
+
 
                     });
                 } else {
