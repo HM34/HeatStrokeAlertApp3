@@ -50,6 +50,7 @@
 
 
             <TextView
+                android:id="@+id/CityName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -60,6 +61,7 @@
 
 
             <TextView
+                android:id="@+id/TMinMax"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -647,6 +649,7 @@
 
 
                     <TextView
+                        android:id="@+id/FeelsLikeTemp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
@@ -699,6 +702,7 @@
 
 
                     <TextView
+                        android:id="@+id/HumidityText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
@@ -708,13 +712,14 @@
 
 
                     <TextView
+                        android:id="@+id/DewPointText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:gravity="center"
                         android:text="The dew point is 17\nright now."
                         android:textColor="#003366"
-                        android:textSize="14sp" />
+                        android:textSize="16sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -751,6 +756,7 @@
 
 
                     <TextView
+                        android:id="@+id/VisibiltyText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
@@ -799,15 +805,20 @@
                             android:textColor="#003366"
                             android:textSize="16sp"
                             android:textStyle="bold" />
+
                     </LinearLayout>
 
-
-                    <ImageView
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-
+                    <TextView
+                        android:id="@+id/PressureText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
-                        android:contentDescription="Pressure Circle" />
+                        android:layout_weight="1"
+                        android:text="8 km"
+                        android:textColor="#FFF"
+                        android:textSize="34sp" />
+
+
                 </LinearLayout>
             </LinearLayout>
 
@@ -829,44 +840,39 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
+                        android:gravity="center"
                         android:orientation="horizontal">
 
                         <ImageView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:layout_marginEnd="8dp"
-                            android:contentDescription="Thermometer Icon"
-                            android:src="@drawable/sun"
+                            android:layout_marginBottom="14dp"
+                            android:contentDescription="Sunrise Icon"
+                            android:src="@drawable/sunrise"
                             app:tint="#003366" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="UI INDEX"
+                            android:layout_marginBottom="12dp"
+                            android:text="SUNRISE"
                             android:textColor="#003366"
                             android:textSize="16sp"
                             android:textStyle="bold" />
+
                     </LinearLayout>
 
-                    <!-- درجة الحرارة -->
+
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:id="@+id/SunriseText"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:text="4"
+                        android:gravity="center"
+                        android:text="5 AM"
                         android:textColor="#FFF"
                         android:textSize="48sp" />
 
-                    <!-- وصف إضافي -->
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:gravity="center"
-                        android:text="MODRATE"
-                        android:textColor="#003366"
-                        android:textSize="20sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -907,20 +913,14 @@
 
 
                     <TextView
-                        android:id="@+id/textView3"
+                        android:id="@+id/SunSetText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
+                        android:text="5 PM"
                         android:textColor="#FFF"
                         android:textSize="48sp" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="Sunset: 7:25 PM"
-                        android:textColor="#003366"
-                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -957,14 +957,16 @@
 
 
                     <TextView
-                        android:id="@+id/textView4"
+                        android:id="@+id/WindDegText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
+                        android:text="50"
                         android:textColor="#FFF"
                         android:textSize="48sp" />
 
                     <TextView
+                        android:id="@+id/WindSpeedText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
@@ -978,7 +980,7 @@
                     android:layout_height="160dp"
                     android:layout_marginBottom="25dp"
                     android:background="@drawable/forecast_background"
-                    android:gravity="center"
+                    android:gravity="center_horizontal"
                     android:orientation="vertical">
 
 
@@ -999,7 +1001,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="RAINFALL"
+                            android:text="TIMEZONE"
                             android:textColor="#003366"
                             android:textSize="16sp"
                             android:textStyle="bold" />
@@ -1007,31 +1009,15 @@
 
 
                     <TextView
+                        android:id="@+id/TimeZoneText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginTop="32dp"
                         android:text="1.8 mm"
                         android:textColor="#FFF"
                         android:textSize="24sp" />
 
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="in last hour"
-                        android:textColor="#003366"
-                        android:textSize="16sp" />
-
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:gravity="center"
-                        android:text="1.2 mm expected in next 24h."
-                        android:textColor="#003366"
-                        android:textSize="14sp" />
                 </LinearLayout>
             </LinearLayout>
 
