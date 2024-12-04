@@ -21,6 +21,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -42,6 +44,11 @@ public class MainActivity extends AppCompatActivity {
     private TextView cityNameTextView, tMinMaxTextView, FeelsLikeTempTextView, HumidityTextView,
             VisibilityTextView, PressureTextTextView, SunriseTextView, SunSetTextView,
             WindDegTextView, WindSpeedTextView, TimeZoneTextView, DewPointTextView;
+
+    private RecyclerView recyclerView;
+    private WeatherAdapter weatherAdapter;
+
+
 
     // Global cityName variable
     private String cityName = "";
@@ -71,6 +78,9 @@ public class MainActivity extends AppCompatActivity {
         WindDegTextView = findViewById(R.id.WindDegText);
         WindSpeedTextView = findViewById(R.id.WindSpeedText);
         TimeZoneTextView = findViewById(R.id.TimeZoneText);
+
+        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // Initialize FusedLocationProviderClient
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
@@ -197,7 +207,7 @@ public class MainActivity extends AppCompatActivity {
                     runOnUiThread(() -> {
                         cityNameTextView.setText(cityName);
 
-                        // Example cityName, replace with actual from API
+                        // today api call
                         WeatherApi.getWeatherData(cityName, new WeatherApi.WeatherDataCallback() {
                             @Override
                             public void onSuccess(String weatherDescription, String weatherMain, double temp, double feelsLike, double tempMin,
@@ -235,6 +245,29 @@ public class MainActivity extends AppCompatActivity {
                                 Toast.makeText(MainActivity.this, "Weather API Error: " + error, Toast.LENGTH_SHORT).show();
                             }
                         });
+                        // Fetch 7-day forecast
+                        WeatherApi7Day.get7DayForecast(latitude, longitude, new WeatherApi7Day.ForecastListener() {
+                            @Override
+                            public void onForecastReceived(WeatherResponse.Daily[] dailyForecast) {
+                                // Loop through the forecast data and log or display it
+                                for (WeatherResponse.Daily day : dailyForecast) {
+                                    String date = new java.text.SimpleDateFormat("yyyy-MM-dd")
+                                            .format(new java.util.Date(day.dt * 1000)); // Convert Unix time to date
+                                    float tempMax = day.temp.max;
+                                    float tempMin = day.temp.min;
+                                    int humidity = day.humidity;
+
+                                    // Log or display the data
+                                    Log.d("Weather", "Date: " + date + ", Max Temp: " + tempMax + "°C, Min Temp: " + tempMin + "°C, Humidity: " + humidity + "%");
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(String error) {
+                                Log.e("Weather", "Error: " + error);
+                            }
+                        });
+
                     });
                 } else {
                     cityName = "City not found"; // Default if not found
