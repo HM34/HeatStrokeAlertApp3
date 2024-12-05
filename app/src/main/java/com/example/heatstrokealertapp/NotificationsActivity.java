@@ -1,8 +1,6 @@
-package com.example.heatstrokealertapp;
-
+package com.example.heatstrokealertapp;// NotificationsActivity.java
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -11,33 +9,22 @@ public class NotificationsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_notifications);
+        setContentView(R.layout.activity_notifications); // This layout is your pop-up layout
 
-        // Find the close button and set a click listener
-        ImageView closeButton = findViewById(R.id.close_button);
-        closeButton.setOnClickListener(new View.OnClickListener() {
+        // Initialize button click listeners or any actions inside NotificationsActivity
+        findViewById(R.id.bell_icon).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Close the activity when the close button is clicked
-                finish();
+                // Handle the button click here (this is the code you want to reuse)
+                RighthandleClickAction();
             }
         });
+    }
 
-        // Example of handling other interactions
-        ImageView bellIcon = findViewById(R.id.bell_icon);
-        bellIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(NotificationsActivity.this, "Bell icon clicked!", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        ImageView notificationIcon = findViewById(R.id.notification_icon);
-        notificationIcon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(NotificationsActivity.this, "Notification icon clicked!", Toast.LENGTH_SHORT).show();
-            }
-        });
+    // Reusable method containing the logic for button clicks
+    public void RighthandleClickAction() {
+        // Your logic from NotificationsActivity goes here
+        // For example, showing a Toast message
+        Toast.makeText(NotificationsActivity.this, "Button clicked in the pop-up!", Toast.LENGTH_SHORT).show();
     }
 }
