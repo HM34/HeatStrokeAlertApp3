@@ -375,7 +375,7 @@ public class MainActivity extends AppCompatActivity {
     // This is the reused logic from NotificationsActivity
     public void RighthandleClickAction(View.OnClickListener onClickListener) {
         // Logic that was in NotificationsActivity (showing a Toast as an example)
-        Toast.makeText(MainActivity.this, "Button clicked inside the pop-up!" + onClickListener, Toast.LENGTH_SHORT).show();
+        Toast.makeText(MainActivity.this, classifyHeatIndex(Double.parseDouble("24")), Toast.LENGTH_SHORT).show();
     }
 
 
