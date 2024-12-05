@@ -5,6 +5,19 @@
     android:layout_height="match_parent"
     android:layoutDirection="ltr">
 
+    <ImageButton
+        android:id="@+id/searchBtn2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="left"
+        android:layout_weight="1"
+        android:background="#00FFFFFF"
+        android:contentDescription="Location Icon"
+        android:layoutDirection="ltr"
+        android:scaleX="0.8"
+        android:scaleY="0.8"
+        android:src="@drawable/search_icon" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -13,6 +26,7 @@
         android:layoutDirection="ltr">
 
         <LinearLayout
+            android:id="@+id/dir"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -21,40 +35,64 @@
             android:padding="16dp">
 
 
-            <androidx.coordinatorlayout.widget.CoordinatorLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="56dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginBottom="16dp"
                 android:layoutDirection="ltr"
                 android:paddingTop="10dp">
 
 
                 <ImageButton
                     android:id="@+id/SearchBtn"
-                    android:layout_width="60dp"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="start"
-                    android:layout_marginEnd="135dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="64dp"
+                    android:layout_gravity="left"
+                    android:layout_weight="1"
+                    android:background="#00FFFFFF"
+                    android:contentDescription="Location Icon"
+                    android:layoutDirection="ltr"
+                    android:src="@drawable/search_icon" />
+
+                <ImageButton
+                    android:id="@+id/searchBtn3"
+                    android:layout_width="match_parent"
+                    android:layout_height="64dp"
+                    android:layout_gravity="left"
+                    android:layout_weight="1"
+                    android:background="#00FFFFFF"
+                    android:contentDescription="Location Icon"
+                    android:layoutDirection="ltr"
+                    android:src="@drawable/help_icon" />
+
+
+                <ImageButton
+                    android:id="@+id/searchBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="64dp"
+                    android:layout_gravity="left"
+                    android:layout_weight="1"
                     android:background="#00FFFFFF"
                     android:contentDescription="Location Icon"
                     android:layoutDirection="ltr"
                     android:scaleX="2"
                     android:scaleY="2"
-                    android:src="@drawable/baseline_location_on_24" />
-
+                    android:src="@drawable/baseline_sunny_24" />
 
                 <ImageButton
                     android:id="@+id/NotificationBtn"
-                    android:layout_width="60dp"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="end"
+                    android:layout_width="match_parent"
+                    android:layout_height="64dp"
+                    android:layout_gravity="start"
+                    android:layout_weight="1"
                     android:background="#00FFFFFF"
                     android:contentDescription="Bell Icon"
                     android:layoutDirection="ltr"
                     android:scaleX="2"
                     android:scaleY="2"
                     android:src="@drawable/baseline_notifications_none_24" />
-            </androidx.coordinatorlayout.widget.CoordinatorLayout>
+            </LinearLayout>
 
 
             <LinearLayout
@@ -104,6 +142,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
                 android:layout_marginBottom="8dp"
                 android:gravity="start"
                 android:layoutDirection="ltr"

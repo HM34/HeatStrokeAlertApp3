@@ -23,6 +23,6 @@ public class SplashActivity extends AppCompatActivity {
                 // Finish SplashActivity so it won't appear again
                 finish();
             }
-        }, 3000); // 5000ms = 5 seconds
+        }, 3000);
     }
 }
