@@ -1,0 +1,39 @@
+<LinearLayout android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_marginEnd="8dp"
+    android:background="@drawable/item_background"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="8dp"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Time -->
+    <TextView
+        android:id="@+id/hourText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="4:30 AM"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+
+    <!-- Weather Icon -->
+    <ImageView
+        android:id="@+id/weatherIcon"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:contentDescription="Weather Icon"
+        android:src="@drawable/safe"
+        tools:ignore="ImageContrastCheck" />
+
+    <!-- Temperature -->
+    <TextView
+        android:id="@+id/tempText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="29°"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+</LinearLayout>

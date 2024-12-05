@@ -15,6 +15,8 @@ public class WeatherItem {
         this.icon = icon;
     }
 
+
+
     // Getters
     public String getDate() {
         return date;

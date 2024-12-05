@@ -33,7 +33,6 @@ import com.google.android.gms.tasks.Task;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -43,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     // Declare views at class level to make them accessible in the callback
-    private TextView cityNameTextView, tMinMaxTextView, FeelsLikeTempTextView, HumidityTextView, VisibilityTextView, PressureTextTextView, SunriseTextView, SunSetTextView, WindDegTextView, WindSpeedTextView, TimeZoneTextView, DewPointTextView;
+    private TextView cityNameTextView, tMinMaxTextView, FeelsLikeTempTextView, HumidityTextView, VisibilityTextView, PressureTextTextView, SunriseTextView, SunSetTextView, WindDegTextView, WindSpeedTextView, UvIndexTextTextView, DewPointTextView;
     private RecyclerView recyclerView;
     private WeatherAdapter weatherAdapter;
     private List<WeatherItem> weatherItems;
@@ -71,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         SunSetTextView = findViewById(R.id.SunSetText);
         WindDegTextView = findViewById(R.id.WindDegText);
         WindSpeedTextView = findViewById(R.id.WindSpeedText);
-        TimeZoneTextView = findViewById(R.id.TimeZoneText);
+        UvIndexTextTextView = findViewById(R.id.UvIndexText);
 
         // Initialize RecyclerView
         recyclerView = findViewById(R.id.recyclerView);
@@ -203,75 +202,46 @@ public class MainActivity extends AppCompatActivity {
                         // today api call
                         WeatherApi.getWeatherData(cityName, new WeatherApi.WeatherDataCallback() {
                             @Override
-                            public void onSuccess(String weatherDescription, String weatherMain, double temp, double feelsLike, double tempMin, double tempMax, double pressure, int humidity, int visibility, double windSpeed, int windDeg, long sunrise, long sunset, int timezone) {
-                                // Format timezone to +3:00 format
-                                String formattedTimezone = formatTimezone(timezone);
+                            public void onSuccess(ArrayList<ArrayList<String>> weatherDataList, String weatherMain, double temp, double feelsLike, double dewPoint, double pressure, int humidity, double Uv, double visibility, double windSpeed, int windDeg, String sunrise, String sunset, double minTempC, double maxTempC, double avgTempC, int avgHumidity) {
 
-                                // Format sunrise and sunset to time (AM/PM)
-                                String formattedSunrise = formatTimestamp(sunrise);
-                                String formattedSunset = formatTimestamp(sunset);
-
-                                // Format visibility in meters to kilometers (optional)
-                                String formattedVisibility = String.format(Locale.US, "%.1f km", visibility / 1000.0); // Convert meters to km
-
-                                // Calculate the dew point
-                                double dewPoint = calculateDewPoint(temp, humidity);
-
-                                // Update the UI with the weather data
-                                TimeZoneTextView.setText(formattedTimezone);
-                                tMinMaxTextView.setText(String.format(Locale.US, "H:%.1f° L:%.1f° %s", tempMax, tempMin, weatherMain));
+                                UvIndexTextTextView.setText(Uv + "");
+                                tMinMaxTextView.setText(String.format(Locale.US, "H:%.1f° L:%.1f° %s", maxTempC, minTempC, weatherMain));
                                 FeelsLikeTempTextView.setText(feelsLike + "°C");
                                 HumidityTextView.setText(humidity + "%");
                                 DewPointTextView.setText(String.format(Locale.US, "The dew point is %.1f°C", dewPoint));
-                                VisibilityTextView.setText(formattedVisibility);
+                                VisibilityTextView.setText(visibility + "KM");
                                 PressureTextTextView.setText(pressure + "\n   hPa");
                                 WindDegTextView.setText(windDeg + "°");
                                 WindSpeedTextView.setText(windSpeed + " m/s");
-                                SunriseTextView.setText(formattedSunrise);
-                                SunSetTextView.setText(formattedSunset);
+                                SunriseTextView.setText(sunrise);
+                                SunSetTextView.setText(sunset);
+
+
+
+
+
+
+                                // Convert weatherDataList to a list of WeatherItem objects
+                                List<WeatherItem> weatherItems = new ArrayList<>();
+                                for (ArrayList<String> dayData : weatherDataList) {
+                                    String date = dayData.get(0);
+                                    String avgTemp = dayData.get(1); // avg temperature, you could use this instead of max/min
+                                    Double minTemp = Double.valueOf(dayData.get(2));
+                                    Double maxTemp = Double.valueOf(dayData.get(3));
+
+                                    // Create a new WeatherItem for each day and add it to the list
+                                    weatherItems.add(new WeatherItem(date, maxTemp, minTemp , 0 , "res/drawable/danger.png"));
+                                }
+
+                                // Set up the RecyclerView with the adapter
+                                WeatherAdapter weatherAdapter = new WeatherAdapter(weatherItems);
+                                recyclerView.setAdapter(weatherAdapter);
                             }
+
 
                             @Override
                             public void onError(String error) {
                                 Toast.makeText(MainActivity.this, "Weather API Error: " + error, Toast.LENGTH_SHORT).show();
-                            }
-                        });
-
-
-                        Forecast7Day.get7DayForecast(latitude, longitude, new Forecast7Day.WeatherDataCallback() {
-
-                            // Inside your activity or fragment class
-                            private final List<WeatherItem> weatherItems = new ArrayList<>(); // Declare this at the class level
-
-                            @Override
-                            public void onSuccess(String date, double tempMin, double tempMax, int humidity) {
-                                // Add new weather item to the list
-                                weatherItems.add(new WeatherItem(date, tempMin, tempMax, humidity, "res/drawable/danger.png"));
-
-                                Collections.reverse(weatherItems);
-
-                                // Update the adapter after all items are added
-                                WeatherAdapter weatherAdapter = new WeatherAdapter(weatherItems);
-                                recyclerView.setAdapter(weatherAdapter);  // Set the adapter to the RecyclerView
-                            }
-
-                            @Override
-                            public void onSuccess(String date, double tempMin, double tempMax, int humidity, String icon) {
-                                // Add new weather item to the list
-                                weatherItems.add(new WeatherItem(date, tempMin, tempMax, humidity, "res/drawable/danger.png"));
-
-                                // Update the adapter after all items are added
-                                if (weatherItems.size() == 7) { // If 7 days of data are added
-                                    WeatherAdapter weatherAdapter = new WeatherAdapter(weatherItems);
-                                    recyclerView.setAdapter(weatherAdapter);  // Set the adapter to the RecyclerView
-                                }
-                            }
-
-
-                            @Override
-                            public void onError(String error) {
-                                // Handle errors if any
-                                System.out.println("Error: " + error);
                             }
                         });
 

@@ -4,12 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background_gradient"
-    android:fillViewport="true">
+    android:fillViewport="true"
+    android:layoutDirection="ltr">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
+        android:gravity="start"
+        android:layoutDirection="ltr"
         android:orientation="vertical"
         android:padding="16dp">
 
@@ -18,6 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:layout_gravity="center"
+            android:layoutDirection="ltr"
             android:paddingTop="10dp">
 
 
@@ -27,6 +30,7 @@
                 android:layout_gravity="start"
                 android:layout_marginEnd="135dp"
                 android:contentDescription="Location Icon"
+                android:layoutDirection="ltr"
                 android:src="@drawable/baseline_location_on_24" />
 
 
@@ -35,6 +39,7 @@
                 android:layout_height="40dp"
                 android:layout_gravity="end"
                 android:contentDescription="Bell Icon"
+                android:layoutDirection="ltr"
                 android:src="@drawable/baseline_notifications_none_24" />
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
@@ -46,6 +51,7 @@
             android:layout_marginTop="5dp"
             android:layout_marginBottom="100dp"
             android:gravity="center"
+            android:layoutDirection="ltr"
             android:orientation="vertical">
 
 
@@ -54,6 +60,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:layoutDirection="ltr"
                 android:text="Qatif"
                 android:textColor="#003366"
                 android:textSize="34sp"
@@ -65,6 +72,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:layoutDirection="ltr"
                 android:text="37° Sunny"
                 android:textColor="#003366"
                 android:textSize="20sp" />
@@ -73,11 +81,13 @@
         <HorizontalScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp">
+            android:layout_marginBottom="20dp"
+            android:layoutDirection="ltr">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layoutDirection="ltr"
                 android:orientation="horizontal">
 
 
@@ -87,6 +97,7 @@
                     android:layout_marginEnd="8dp"
                     android:background="@drawable/item_background"
                     android:gravity="center"
+                    android:layoutDirection="ltr"
                     android:orientation="vertical"
                     android:padding="8dp">
 
@@ -94,6 +105,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
+                        android:layoutDirection="ltr"
                         android:text="4:30 AM"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -102,6 +114,7 @@
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:contentDescription="Weather Icon"
+                        android:layoutDirection="ltr"
                         android:src="@drawable/safe"
                         tools:ignore="ImageContrastCheck" />
 
@@ -109,6 +122,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
+                        android:layoutDirection="ltr"
                         android:text="29°"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -120,6 +134,7 @@
                     android:layout_marginEnd="8dp"
                     android:background="@drawable/item_background"
                     android:gravity="center"
+                    android:layoutDirection="ltr"
                     android:orientation="vertical"
                     android:padding="8dp">
 
@@ -127,6 +142,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
+                        android:layoutDirection="ltr"
                         android:text="09:30 AM"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -135,12 +151,14 @@
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:contentDescription="Weather Icon"
+                        android:layoutDirection="ltr"
                         android:src="@drawable/caution" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
+                        android:layoutDirection="ltr"
                         android:text="34°"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -152,6 +170,7 @@
                     android:layout_marginEnd="8dp"
                     android:background="@drawable/item_background"
                     android:gravity="center"
+                    android:layoutDirection="ltr"
                     android:orientation="vertical"
                     android:padding="8dp">
 
@@ -159,6 +178,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
+                        android:layoutDirection="ltr"
                         android:text="11:30 AM"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -167,12 +187,14 @@
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:contentDescription="Weather Icon"
+                        android:layoutDirection="ltr"
                         android:src="@drawable/ext_caution" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
+                        android:layoutDirection="ltr"
                         android:text="39°"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -184,6 +206,7 @@
                     android:layout_marginEnd="8dp"
                     android:background="@drawable/item_background"
                     android:gravity="center"
+                    android:layoutDirection="ltr"
                     android:orientation="vertical"
                     android:padding="8dp">
 
@@ -191,6 +214,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
+                        android:layoutDirection="ltr"
                         android:text="12:30 PM"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -199,12 +223,14 @@
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:contentDescription="Weather Icon"
+                        android:layoutDirection="ltr"
                         android:src="@drawable/danger" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
+                        android:layoutDirection="ltr"
                         android:text="42°"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -216,6 +242,7 @@
                     android:layout_marginEnd="8dp"
                     android:background="@drawable/item_background"
                     android:gravity="center"
+                    android:layoutDirection="ltr"
                     android:orientation="vertical"
                     android:padding="8dp">
 
@@ -223,6 +250,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
+                        android:layoutDirection="ltr"
                         android:text="1:30 PM"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -231,12 +259,14 @@
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:contentDescription="Weather Icon"
+                        android:layoutDirection="ltr"
                         android:src="@drawable/extreames_danger" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
+                        android:layoutDirection="ltr"
                         android:text="45°"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -248,6 +278,7 @@
                     android:layout_marginEnd="8dp"
                     android:background="@drawable/item_background"
                     android:gravity="center"
+                    android:layoutDirection="ltr"
                     android:orientation="vertical"
                     android:padding="8dp">
 
@@ -255,6 +286,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
+                        android:layoutDirection="ltr"
                         android:text="2:30 PM"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -263,12 +295,14 @@
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:contentDescription="Weather Icon"
+                        android:layoutDirection="ltr"
                         android:src="@drawable/extreames_danger" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
+                        android:layoutDirection="ltr"
                         android:text="46°"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -280,6 +314,7 @@
                     android:layout_marginEnd="8dp"
                     android:background="@drawable/item_background"
                     android:gravity="center"
+                    android:layoutDirection="ltr"
                     android:orientation="vertical"
                     android:padding="8dp">
 
@@ -287,6 +322,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
+                        android:layoutDirection="ltr"
                         android:text="3:30 PM"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -295,12 +331,14 @@
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:contentDescription="Weather Icon"
+                        android:layoutDirection="ltr"
                         android:src="@drawable/extreames_danger" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
+                        android:layoutDirection="ltr"
                         android:text="47°"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -311,37 +349,43 @@
         </HorizontalScrollView>
 
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:gravity="start"
+            android:layoutDirection="ltr"
+            android:text="Next Forecast"
+            android:textColor="#003366"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="203dp"
             android:layout_marginBottom="16dp"
-            android:fillViewport="true">
+            android:fillViewport="true"
+            android:layoutDirection="ltr">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layoutDirection="ltr"
                 android:orientation="vertical"
                 android:padding="16dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:text="Next Forecast"
-                    android:textColor="#003366"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
 
-
-                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layoutDirection="ltr"
                     android:orientation="vertical">
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recyclerView"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
+                        android:layout_height="match_parent"
+                        android:layoutDirection="ltr" />
 
                 </LinearLayout>
 
@@ -352,6 +396,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
+            android:layoutDirection="ltr"
             android:orientation="horizontal"
             android:paddingTop="5dp">
 
@@ -360,6 +405,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="25dp"
+                android:layoutDirection="ltr"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -368,6 +414,7 @@
                     android:layout_marginBottom="25dp"
                     android:background="@drawable/forecast_background"
                     android:gravity="center"
+                    android:layoutDirection="ltr"
                     android:minHeight="160dp"
                     android:orientation="vertical">
 
@@ -377,6 +424,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="16dp"
                         android:gravity="center_vertical"
+                        android:layoutDirection="ltr"
                         android:orientation="horizontal">
 
                         <ImageView
@@ -384,12 +432,14 @@
                             android:layout_height="24dp"
                             android:layout_marginEnd="8dp"
                             android:contentDescription="Thermometer Icon"
+                            android:layoutDirection="ltr"
                             android:src="@drawable/feels_like"
                             app:tint="#003366" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layoutDirection="ltr"
                             android:text="FEELS LIKE"
                             android:textColor="#003366"
                             android:textSize="16sp"
@@ -402,6 +452,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
+                        android:layoutDirection="ltr"
                         android:text="19°"
                         android:textColor="#FFF"
                         android:textSize="34sp" />
@@ -412,6 +463,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:gravity="center"
+                        android:layoutDirection="ltr"
                         android:text="Similar to the actual temperature."
                         android:textColor="#003366"
                         android:textSize="14sp" />
@@ -423,6 +475,7 @@
                     android:layout_marginBottom="25dp"
                     android:background="@drawable/forecast_background"
                     android:gravity="center"
+                    android:layoutDirection="ltr"
                     android:orientation="vertical">
 
 
@@ -430,6 +483,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
+                        android:layoutDirection="ltr"
                         android:orientation="horizontal">
 
                         <ImageView
@@ -437,12 +491,14 @@
                             android:layout_height="24dp"
                             android:layout_marginEnd="8dp"
                             android:contentDescription="Humidity Icon"
+                            android:layoutDirection="ltr"
                             android:src="@drawable/humidity"
                             app:tint="#003366" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layoutDirection="ltr"
                             android:text="HUMIDITY"
                             android:textColor="#003366"
                             android:textSize="16sp"
@@ -455,6 +511,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
+                        android:layoutDirection="ltr"
                         android:text="90%"
                         android:textColor="#FFF"
                         android:textSize="34sp" />
@@ -466,6 +523,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:gravity="center"
+                        android:layoutDirection="ltr"
                         android:text="The dew point is 17\nright now."
                         android:textColor="#003366"
                         android:textSize="16sp" />
@@ -477,6 +535,7 @@
                     android:layout_marginBottom="25dp"
                     android:background="@drawable/forecast_background"
                     android:gravity="center"
+                    android:layoutDirection="ltr"
                     android:orientation="vertical">
 
 
@@ -484,6 +543,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
+                        android:layoutDirection="ltr"
                         android:orientation="horizontal">
 
                         <ImageView
@@ -491,12 +551,14 @@
                             android:layout_height="24dp"
                             android:layout_marginEnd="8dp"
                             android:contentDescription="Visibility Icon"
+                            android:layoutDirection="ltr"
                             android:src="@drawable/visibility"
                             app:tint="#003366" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layoutDirection="ltr"
                             android:text="VISIBILITY"
                             android:textColor="#003366"
                             android:textSize="16sp"
@@ -509,6 +571,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
+                        android:layoutDirection="ltr"
                         android:text="8 km"
                         android:textColor="#FFF"
                         android:textSize="34sp" />
@@ -522,6 +585,7 @@
                     android:layout_marginBottom="25dp"
                     android:background="@drawable/forecast_background"
                     android:gravity="center"
+                    android:layoutDirection="ltr"
                     android:orientation="vertical">
 
 
@@ -529,6 +593,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
+                        android:layoutDirection="ltr"
                         android:orientation="horizontal">
 
                         <ImageView
@@ -536,12 +601,14 @@
                             android:layout_height="24dp"
                             android:layout_marginEnd="8dp"
                             android:contentDescription="Pressure Icon"
+                            android:layoutDirection="ltr"
                             android:src="@drawable/pressure"
                             app:tint="#003366" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layoutDirection="ltr"
                             android:text="PRESSURE"
                             android:textColor="#003366"
                             android:textSize="16sp"
@@ -554,6 +621,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
+                        android:layoutDirection="ltr"
                         android:text="8 km"
                         android:textColor="#FFF"
                         android:textSize="24sp" />
@@ -565,6 +633,7 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layoutDirection="ltr"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -574,6 +643,7 @@
                     android:background="@drawable/forecast_background"
                     android:baselineAligned="false"
                     android:gravity="center"
+                    android:layoutDirection="ltr"
                     android:orientation="vertical">
 
 
@@ -581,6 +651,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
+                        android:layoutDirection="ltr"
                         android:orientation="horizontal">
 
                         <ImageView
@@ -589,6 +660,7 @@
                             android:layout_marginEnd="8dp"
                             android:layout_marginBottom="14dp"
                             android:contentDescription="Sunrise Icon"
+                            android:layoutDirection="ltr"
                             android:src="@drawable/sunrise"
                             app:tint="#003366" />
 
@@ -596,6 +668,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="12dp"
+                            android:layoutDirection="ltr"
                             android:text="SUNRISE"
                             android:textColor="#003366"
                             android:textSize="16sp"
@@ -609,6 +682,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
+                        android:layoutDirection="ltr"
                         android:text="5 AM"
                         android:textColor="#FFF"
                         android:textSize="34sp" />
@@ -622,6 +696,7 @@
                     android:background="@drawable/forecast_background"
                     android:baselineAligned="false"
                     android:gravity="center"
+                    android:layoutDirection="ltr"
                     android:orientation="vertical">
 
 
@@ -629,6 +704,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
+                        android:layoutDirection="ltr"
                         android:orientation="horizontal">
 
                         <ImageView
@@ -637,6 +713,7 @@
                             android:layout_marginEnd="8dp"
                             android:layout_marginBottom="14dp"
                             android:contentDescription="Sunrise Icon"
+                            android:layoutDirection="ltr"
                             android:src="@drawable/sunrise"
                             app:tint="#003366" />
 
@@ -644,6 +721,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="12dp"
+                            android:layoutDirection="ltr"
                             android:text="SUNRISE"
                             android:textColor="#003366"
                             android:textSize="16sp"
@@ -657,6 +735,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
+                        android:layoutDirection="ltr"
                         android:text="5 PM"
                         android:textColor="#FFF"
                         android:textSize="34sp" />
@@ -669,6 +748,7 @@
                     android:layout_marginBottom="25dp"
                     android:background="@drawable/forecast_background"
                     android:gravity="center"
+                    android:layoutDirection="ltr"
                     android:orientation="vertical">
 
 
@@ -676,6 +756,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center"
+                        android:layoutDirection="ltr"
                         android:orientation="horizontal">
 
                         <ImageView
@@ -683,12 +764,14 @@
                             android:layout_height="24dp"
                             android:layout_marginEnd="8dp"
                             android:contentDescription="Wind Icon"
+                            android:layoutDirection="ltr"
                             android:src="@drawable/wind"
                             app:tint="#003366" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layoutDirection="ltr"
                             android:text="WIND"
                             android:textColor="#003366"
                             android:textSize="16sp"
@@ -701,6 +784,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
+                        android:layoutDirection="ltr"
                         android:text="50"
                         android:textColor="#FFF"
                         android:textSize="34sp" />
@@ -710,6 +794,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
+                        android:layoutDirection="ltr"
                         android:text="9.7 km/h"
                         android:textColor="#003366"
                         android:textSize="18sp" />
@@ -721,6 +806,7 @@
                     android:layout_marginBottom="25dp"
                     android:background="@drawable/forecast_background"
                     android:gravity="center"
+                    android:layoutDirection="ltr"
                     android:orientation="vertical">
 
 
@@ -728,12 +814,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
+                        android:layoutDirection="ltr"
                         android:orientation="horizontal">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="TIMEZONE"
+                            android:layoutDirection="ltr"
+                            android:text="UV INDEX"
                             android:textColor="#003366"
                             android:textSize="16sp"
                             android:textStyle="bold" />
@@ -741,10 +829,11 @@
 
 
                     <TextView
-                        android:id="@+id/TimeZoneText"
+                        android:id="@+id/UvIndexText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
+                        android:layoutDirection="ltr"
                         android:text="1.8 mm"
                         android:textColor="#FFF"
                         android:textSize="34sp" />

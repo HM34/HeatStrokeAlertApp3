@@ -10,8 +10,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-//import com.squareup.picasso.Picasso;
-
 import java.util.List;
 
 public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.WeatherViewHolder> {
@@ -44,7 +42,6 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.WeatherV
 //        Picasso.get().load(weatherItem.getIcon()).into(holder.weatherIcon);
     }
 
-
     @Override
     public int getItemCount() {
         return forecastList.size();
@@ -62,4 +59,6 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.WeatherV
             weatherIcon = itemView.findViewById(R.id.weatherIcon);
         }
     }
+
+
 }
