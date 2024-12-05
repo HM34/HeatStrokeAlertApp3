@@ -213,6 +213,7 @@ public class MainActivity extends AppCompatActivity {
 
                         // today api call
                         WeatherApi.getWeatherData(cityName, new WeatherApi.WeatherDataCallback() {
+                            @SuppressLint("SetTextI18n")
                             @Override
                             public void onSuccess(ArrayList<ArrayList<String>> hourlyWeatherDataList, ArrayList<ArrayList<String>> weatherDataList, String weatherMain, double temp, double feelsLike, double dewPoint, double pressure, int humidity, double Uv, double visibility, double windSpeed, int windDeg, String sunrise, String sunset, double minTempC, double maxTempC, double avgTempC, int avgHumidity) {
 
@@ -258,11 +259,15 @@ public class MainActivity extends AppCompatActivity {
                                 for (ArrayList<String> dayData : weatherDataList) {
                                     String date = dayData.get(0);
                                     String avgTemp = dayData.get(1); // avg temperature, you could use this instead of max/min
-                                    Double minTemp = Double.valueOf(dayData.get(2));
-                                    Double maxTemp = Double.valueOf(dayData.get(3));
+                                    double minTemp = Double.parseDouble(dayData.get(2));
+                                    double maxTemp = Double.parseDouble(dayData.get(3));
+                                    int forecastavgHumidity = Integer.parseInt((dayData.get(4)));
+                                    double heatIndex = calculateHeatIndex(Double.parseDouble(avgTemp),forecastavgHumidity);
+                                    String iconPath = classifyHeatIndex(heatIndex);
+
 
                                     // Create a new WeatherItem for each day and add it to the list
-                                    weatherItems.add(new WeatherItem(date, maxTemp, minTemp , 0 , "res/drawable/danger.png"));
+                                    weatherItems.add(new WeatherItem(date, maxTemp, minTemp, forecastavgHumidity, iconPath));
                                 }
 
                                 // Set up the RecyclerView with the adapter
@@ -309,6 +314,22 @@ public class MainActivity extends AppCompatActivity {
         } else {
             return "extreme_danger"; // Corresponds to res/drawable/extreme_danger.png
         }
+    }
+
+    public static double calculateHeatIndex(double temperatureCelsius, double humidity) {
+        // Applying the heat index formula for Celsius
+        double HI = -8.784694755 +
+                1.61139411 * temperatureCelsius +
+                2.338548838 * humidity -
+                0.14611605 * temperatureCelsius * humidity -
+                0.012308094 * Math.pow(temperatureCelsius, 2) -
+                0.016424828 * Math.pow(humidity, 2) +
+                0.002211732 * Math.pow(temperatureCelsius, 2) * humidity +
+                0.00072546 * Math.pow(humidity, 2) * temperatureCelsius -
+                0.00000358 * Math.pow(temperatureCelsius, 2) * Math.pow(humidity, 2);
+
+        // Return the calculated heat index in Celsius
+        return HI;
     }
 
 

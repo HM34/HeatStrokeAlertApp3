@@ -10,6 +10,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.List;
 
 public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.WeatherViewHolder> {
@@ -38,8 +40,16 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.WeatherV
         holder.MaxTemperatureText.setText(weatherItem.getTempMax() + "°C");
         holder.MinTemperatureText.setText(weatherItem.getTempMin() + "°C");
 
-        // You can also load the icon with Picasso or Glide
-//        Picasso.get().load(weatherItem.getIcon()).into(holder.weatherIcon);
+        // Get the icon path (just the name, e.g., "safe", "caution", etc.)
+        String iconPath = weatherItem.getIcon();
+
+        // Get the resource ID based on the icon name
+        int iconResId = holder.itemView.getContext().getResources().getIdentifier(iconPath, "drawable", holder.itemView.getContext().getPackageName());
+
+        // Load the icon dynamically using Glide
+        Glide.with(holder.weatherIcon.getContext())
+                .load(iconResId)  // Load the drawable resource by its ID
+                .into(holder.weatherIcon);
     }
 
     @Override
@@ -59,6 +69,4 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.WeatherV
             weatherIcon = itemView.findViewById(R.id.DailyWeatherIcon);
         }
     }
-
-
 }
