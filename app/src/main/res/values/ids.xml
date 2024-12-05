@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="recyclerViewDays" type="id" />
+    <item name="recyclerViewHours" type="id" />
+    <item name="UvIndexText" type="id" />
+</resources>

@@ -5,6 +5,7 @@
     android:layout_marginEnd="8dp"
     android:background="@drawable/item_background"
     android:gravity="center"
+    android:layoutDirection="ltr"
     android:orientation="vertical"
     android:padding="8dp">
 
@@ -14,7 +15,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:layoutDirection="ltr"
         android:text="4:30 AM"
+        android:textColor="#003366"
         android:textSize="14sp"
         android:textStyle="bold" />
 
@@ -24,6 +27,7 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:contentDescription="Weather Icon"
+        android:layoutDirection="ltr"
         android:src="@drawable/safe"
         tools:ignore="ImageContrastCheck" />
 
@@ -33,7 +37,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:layoutDirection="ltr"
         android:text="29°"
+        android:textColor="#003366"
         android:textSize="16sp"
         android:textStyle="bold" />
 

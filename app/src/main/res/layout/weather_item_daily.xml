@@ -5,6 +5,7 @@
     android:layout_marginBottom="8dp"
     android:background="@drawable/border"
     android:gravity="center"
+    android:layoutDirection="ltr"
     android:orientation="horizontal">
 
     <!-- Date TextView -->
@@ -14,6 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
+        android:layoutDirection="ltr"
         android:padding="5dp"
         android:text="Sep_12"
         android:textColor="#003366"
@@ -27,6 +29,7 @@
         android:layout_height="50dp"
         android:layout_weight="1"
         android:contentDescription="Weather Icon"
+        android:layoutDirection="ltr"
         android:padding="5dp"
         android:src="@drawable/caution" />
 
@@ -37,6 +40,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
+        android:layoutDirection="ltr"
         android:orientation="horizontal"
         android:padding="5dp">
 
@@ -46,6 +50,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
+            android:layoutDirection="ltr"
             android:text="38°"
             android:textColor="#003366"
             android:textSize="16sp"
@@ -57,6 +62,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
+            android:layoutDirection="ltr"
             android:text="38°"
             android:textColor="#003366"
             android:textSize="16sp"

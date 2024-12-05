@@ -1,0 +1,24 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:height="50dp"
+    android:width="50dp"
+    android:viewportHeight="50"
+    android:viewportWidth="50">
+
+    <!-- The outer circle -->
+    <path
+        android:fillColor="@android:color/transparent"
+        android:strokeColor="#000000"
+        android:strokeWidth="5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M40,21.25C40,31.6052 31.6052,40 21.25,40C10.8947,40 2.5,31.6052 2.5,21.25C2.5,10.8947 10.8947,2.5 21.25,2.5C31.6052,2.5 40,10.8947 40,21.25Z"/>
+
+    <!-- The diagonal line -->
+    <path
+        android:fillColor="@android:color/transparent"
+        android:strokeColor="#000000"
+        android:strokeWidth="5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M34.4887,34.5278L47.5,47.5"/>
+</vector>
