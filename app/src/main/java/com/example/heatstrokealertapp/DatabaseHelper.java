@@ -1,5 +1,6 @@
 package com.example.heatstrokealertapp;
 
+
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -20,7 +21,7 @@ import java.util.ArrayList;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "cities.db";
-    private static final int DATABASE_VERSION = 10; // Version 1, no need for upgrade yet
+    private static final int DATABASE_VERSION = 10;
 
     private static final String TABLE_CITIES = "cities";
     private static final String COLUMN_ID = "id";
