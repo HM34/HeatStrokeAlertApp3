@@ -54,4 +54,6 @@ dependencies {
     implementation ("androidx.recyclerview:recyclerview:1.2.1")
     implementation ("com.github.bumptech.glide:glide:4.13.0")
     annotationProcessor  ("com.github.bumptech.glide:compiler:4.13.0")
+    implementation ("androidx.drawerlayout:drawerlayout:1.1.1")
+    implementation ("androidx.appcompat:appcompat:1.4.0")
 }

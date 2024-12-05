@@ -1,13 +1,11 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
-    android:background="@drawable/background_gradient">
+    android:padding="16dp">
 
-
+    <!-- Search bar -->
     <EditText
         android:id="@+id/search_bar"
         android:layout_width="match_parent"
@@ -19,124 +17,9 @@
         android:padding="12dp"
         android:layout_marginBottom="16dp" />
 
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Recent search"
-        android:textColor="#003366"
-        android:textStyle="bold"
-        android:layout_marginBottom="8dp" />
-
-
-    <LinearLayout
+    <!-- List to display cities -->
+    <ListView
+        android:id="@+id/city_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="8dp">
-
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/baseline_access_time_24"
-                android:contentDescription="Clock Icon"
-                app:tint="#003366" />
-
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Dammam"
-                android:textColor="#003366"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:layout_marginStart="10dp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="34° / 23°"
-                android:textColor="#003366"
-                android:textStyle="bold"
-                android:textSize="14sp"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="8dp">
-
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/baseline_access_time_24"
-                android:contentDescription="Clock Icon"
-                app:tint="#003366" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="jubil"
-                android:textColor="#003366"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:layout_marginStart="10dp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="30° / 21°"
-                android:textColor="#003366"
-                android:textStyle="bold"
-                android:textSize="14sp"/>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="8dp">
-
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/baseline_access_time_24"
-                android:contentDescription="Clock Icon"
-                app:tint="#003366" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="khobar"
-                android:textColor="#003366"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:layout_marginStart="10dp"/>
-
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="34° / 23°"
-                android:textColor="#003366"
-                android:textStyle="bold"
-                android:textSize="14sp"/>
-        </LinearLayout>
-
-
-
-
-
-
-    </LinearLayout>
-
+        android:layout_height="wrap_content" />
 </LinearLayout>

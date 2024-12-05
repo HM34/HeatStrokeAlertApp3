@@ -14,6 +14,9 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +24,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -31,9 +35,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -44,6 +46,10 @@ public class MainActivity extends AppCompatActivity {
     // Declare views at class level to make them accessible in the callback
     private TextView cityNameTextView, tMinMaxTextView, FeelsLikeTempTextView, HumidityTextView, VisibilityTextView, PressureTextTextView, SunriseTextView, SunSetTextView, WindDegTextView, WindSpeedTextView, UvIndexTextTextView, DewPointTextView;
     private RecyclerView recyclerView, hourlyWeatherRecyclerView;
+
+    private DrawerLayout drawerLayout;
+    private ImageButton OpenSearchBtn,OpenNotificationBtn;
+    private FrameLayout rightPopupLayout,leftPopupLayout;
 
     LinearLayoutManager linearLayoutManager;
 
@@ -78,14 +84,48 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         hourlyWeatherRecyclerView = findViewById(R.id.recyclerViewHours);
-
-        // Set the LinearLayoutManager with horizontal orientation
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-
-        // Apply the layout manager to your RecyclerView
         hourlyWeatherRecyclerView.setLayoutManager(layoutManager);
 
 
+        // Initialize views
+        drawerLayout = findViewById(R.id.drawer_layout);
+        OpenNotificationBtn = findViewById(R.id.NotificationBtn);
+        OpenSearchBtn = findViewById(R.id.SearchBtn);
+        rightPopupLayout = findViewById(R.id.notification_popup);
+        leftPopupLayout = findViewById(R.id.search_popup);
+
+
+        // Open the pop-up when the first button is clicked
+        OpenNotificationBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Slide the pop-up in from the right
+                rightPopupLayout.setVisibility(View.VISIBLE);
+                drawerLayout.openDrawer(rightPopupLayout);
+            }
+        });
+
+        // Handle clicks inside the pop-up using the reusable logic from NotificationsActivity
+        rightPopupLayout.findViewById(R.id.bell_icon).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Call the handleClickAction method from NotificationsActivity
+                // This method is reused for the pop-up button action
+                RighthandleClickAction(this);
+            }
+        });
+
+
+        // Other action for the second button
+        OpenSearchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Slide the pop-up in from the right
+                leftPopupLayout.setVisibility(View.VISIBLE);
+                drawerLayout.openDrawer(leftPopupLayout);
+            }
+        });
 
 
 
@@ -332,6 +372,11 @@ public class MainActivity extends AppCompatActivity {
         return HI;
     }
 
+    // This is the reused logic from NotificationsActivity
+    public void RighthandleClickAction(View.OnClickListener onClickListener) {
+        // Logic that was in NotificationsActivity (showing a Toast as an example)
+        Toast.makeText(MainActivity.this, "Button clicked inside the pop-up!" + onClickListener, Toast.LENGTH_SHORT).show();
+    }
 
 
 }
