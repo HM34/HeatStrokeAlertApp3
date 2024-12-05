@@ -9,8 +9,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class WeatherApi {
     private static final String API_KEY = "d61006078fa84f45bf3224454240412"; // Replace with your WeatherAPI key
@@ -22,7 +23,7 @@ public class WeatherApi {
             protected String doInBackground(String... params) {
                 String city = params[0];
                 // Correct the URL and remove the extra space after the API key
-                String urlString = BASE_URL + "?key=" + API_KEY + "&q=" + city + "&days=7&aqi=no&alerts=no";
+                String urlString = BASE_URL + "?key=" + API_KEY + "&q=" + city + "&days=7&hourly=yes&aqi=no&alerts=no";
 
                 try {
                     URL url = new URL(urlString);
@@ -76,32 +77,53 @@ public class WeatherApi {
                         int avgHumidity = dayWeather.getInt("avghumidity");
 
 
+                        // ArrayList to store the hourly weather data as ArrayList<String>
+                        ArrayList<ArrayList<String>> hourlyWeatherDataList = new ArrayList<>();
 
-                        if (forecastday.length() > 0) {
-                            // Get the first forecast day
-                            JSONObject firstForecastDay = forecastday.getJSONObject(0);
+                        // Navigate to the "hour" array of the first forecast day
+                        JSONObject Hourforecast = jsonResponse.getJSONObject("forecast");
+                        JSONArray Hourforecastday = Hourforecast.getJSONArray("forecastday");
+                        JSONObject firstDay = Hourforecastday.getJSONObject(0); // Get the first day
 
-                            // Get the hour array for this first day
-                            JSONArray hourArray = firstForecastDay.getJSONArray("hour");
+                        JSONArray hours = firstDay.getJSONArray("hour");
 
-                            // List to store hourly weather data
-                            ArrayList<HourlyWeather> hourlyWeatherList = new ArrayList<>();
+                        for (int i = 0; i < hours.length(); i++) {
+                            JSONObject hourData = hours.getJSONObject(i);
 
-                            // Loop through each hour in the first day's forecast
-                            for (int j = 0; j < hourArray.length(); j++) {
-                                JSONObject hourData = hourArray.getJSONObject(j);
+                            // Extract time, temperature, and humidity for each hour
+                            String hourtime = hourData.getString("time");
+                            // Define the original datetime format (24-hour format)
+                            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.US);
 
-                                // Extract time, temp_c, and humidity
-                                String hourtime = hourData.getString("time");
-                                double hourtempC = hourData.getDouble("temp_c");
-                                int hourhumidity = hourData.getInt("humidity");
+                            // Define the desired time format (12-hour format)
+                            SimpleDateFormat outputFormat = new SimpleDateFormat("hh:mm a", Locale.US);
+                            // Parse the original time string into a Date object
+                            Date date = inputFormat.parse(hourtime);
 
-                                // Create a new HourlyWeather object and add it to the list
-                                hourlyWeatherList.add(new HourlyWeather(hourtime, hourtempC, hourhumidity));
-                            }
+                            // Format the Date object into the desired 12-hour format
+                            String formattedTime = outputFormat.format(date);  // e.g., "01:00 PM"
+                            double hourtempC = hourData.getDouble("temp_c");
+                            int hourheatindex = hourData.getInt("heatindex_c");
 
+                            // Create a new ArrayList to hold the data for this hour
+                            ArrayList<String> hourDataList = new ArrayList<>();
 
+                            // Add the data (time, temperature, humidity) to the hourDataList
+                            hourDataList.add(formattedTime);
+                            hourDataList.add(String.valueOf(hourtempC)); // Convert double to String
+                            hourDataList.add(String.valueOf(hourheatindex)); // Convert int to String
+
+                            // Add the hour's data to the main hourlyWeatherDataList
+                            hourlyWeatherDataList.add(hourDataList);
                         }
+
+                            // Now hourlyWeatherDataList is populated with hourly data for the first forecast day
+
+
+
+
+
+
 
                         // ArrayList to store all the dates
                         ArrayList<ArrayList<String>> weatherDataList = new ArrayList<>();
@@ -130,7 +152,7 @@ public class WeatherApi {
 
 
                         // Pass the extracted data to the callback
-                        callback.onSuccess(weatherDataList,weatherMain, temp, feelsLike, dewPoint, pressure, humidity, visibility,Uv, windSpeed, windDeg,sunrise,sunset, minTempC, maxTempC, avgTempC, avgHumidity);
+                        callback.onSuccess(hourlyWeatherDataList, weatherDataList, weatherMain, temp, feelsLike, dewPoint, pressure, humidity, visibility, Uv, windSpeed, windDeg, sunrise, sunset, minTempC, maxTempC, avgTempC, avgHumidity);
 
                     } catch (Exception e) {
                         callback.onError("Failed to parse data");
@@ -144,7 +166,7 @@ public class WeatherApi {
 
     // Interface for callback
     public interface WeatherDataCallback {
-        void onSuccess(ArrayList<ArrayList<String>> weatherDataList,String weatherMain, double temp, double feelsLike, double dewPoint, double pressure, int humidity,double Uv, double visibility, double windSpeed, int windDeg,String sunrise,String sunset, double minTempC, double maxTempC ,double avgTempC  ,int avgHumidity);
+        void onSuccess(ArrayList<ArrayList<String>> hourlyWeatherDataList, ArrayList<ArrayList<String>> weatherDataList, String weatherMain, double temp, double feelsLike, double dewPoint, double pressure, int humidity, double Uv, double visibility, double windSpeed, int windDeg, String sunrise, String sunset, double minTempC, double maxTempC , double avgTempC  , int avgHumidity);
 
         void onError(String error);
     }

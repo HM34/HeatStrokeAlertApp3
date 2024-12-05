@@ -43,9 +43,10 @@ public class MainActivity extends AppCompatActivity {
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     // Declare views at class level to make them accessible in the callback
     private TextView cityNameTextView, tMinMaxTextView, FeelsLikeTempTextView, HumidityTextView, VisibilityTextView, PressureTextTextView, SunriseTextView, SunSetTextView, WindDegTextView, WindSpeedTextView, UvIndexTextTextView, DewPointTextView;
-    private RecyclerView recyclerView;
-    private WeatherAdapter weatherAdapter;
-    private List<WeatherItem> weatherItems;
+    private RecyclerView recyclerView, hourlyWeatherRecyclerView;
+
+    LinearLayoutManager linearLayoutManager;
+
     // Global cityName variable
     private String cityName = "";
     // FusedLocationProviderClient instance
@@ -73,8 +74,19 @@ public class MainActivity extends AppCompatActivity {
         UvIndexTextTextView = findViewById(R.id.UvIndexText);
 
         // Initialize RecyclerView
-        recyclerView = findViewById(R.id.recyclerView);
+        recyclerView = findViewById(R.id.recyclerViewDays);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        hourlyWeatherRecyclerView = findViewById(R.id.recyclerViewHours);
+
+        // Set the LinearLayoutManager with horizontal orientation
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+
+        // Apply the layout manager to your RecyclerView
+        hourlyWeatherRecyclerView.setLayoutManager(layoutManager);
+
+
+
 
 
 
@@ -202,7 +214,7 @@ public class MainActivity extends AppCompatActivity {
                         // today api call
                         WeatherApi.getWeatherData(cityName, new WeatherApi.WeatherDataCallback() {
                             @Override
-                            public void onSuccess(ArrayList<ArrayList<String>> weatherDataList, String weatherMain, double temp, double feelsLike, double dewPoint, double pressure, int humidity, double Uv, double visibility, double windSpeed, int windDeg, String sunrise, String sunset, double minTempC, double maxTempC, double avgTempC, int avgHumidity) {
+                            public void onSuccess(ArrayList<ArrayList<String>> hourlyWeatherDataList, ArrayList<ArrayList<String>> weatherDataList, String weatherMain, double temp, double feelsLike, double dewPoint, double pressure, int humidity, double Uv, double visibility, double windSpeed, int windDeg, String sunrise, String sunset, double minTempC, double maxTempC, double avgTempC, int avgHumidity) {
 
                                 UvIndexTextTextView.setText(Uv + "");
                                 tMinMaxTextView.setText(String.format(Locale.US, "H:%.1f° L:%.1f° %s", maxTempC, minTempC, weatherMain));
@@ -217,6 +229,26 @@ public class MainActivity extends AppCompatActivity {
                                 SunSetTextView.setText(sunset);
 
 
+                                // Initialize hourlyWeatherList to store HourlyWeather objects
+                                List<HourlyWeather> hourlyWeatherList = new ArrayList<>();
+
+                                // Assuming hourlyWeatherDataList is an ArrayList of ArrayList<String> where each inner ArrayList represents an hour's data
+                                for (ArrayList<String> hourData : hourlyWeatherDataList) {
+                                    // Ensure the hourData has at least 3 elements (time, temp, and humidity)
+                                    if (hourData.size() >= 3) {
+                                        String hourtime = hourData.get(0);  // Time (e.g., "4:30 AM")
+                                        double hourtempC = Double.parseDouble(hourData.get(1));  // Temperature (e.g., "29.0")
+                                        int hourheatindex = Integer.parseInt(hourData.get(2));  // Humidity (e.g., "60")
+                                        String IconPath = classifyHeatIndex(hourheatindex);
+
+                                        // Create a new HourlyWeather object and add it to the list
+                                        hourlyWeatherList.add(new HourlyWeather(hourtime, hourtempC, IconPath));
+                                    }
+                                }
+
+                                // Create the adapter with the populated hourlyWeatherList
+                                HourlyWeatherAdapter hourlyWeatherAdapter = new HourlyWeatherAdapter(hourlyWeatherList);
+                                hourlyWeatherRecyclerView.setAdapter(hourlyWeatherAdapter);
 
 
 
@@ -263,24 +295,22 @@ public class MainActivity extends AppCompatActivity {
         }).start();
     }
 
-    // Format timezone in +3:00 format
-    private String formatTimezone(int timezoneInSeconds) {
-        int hours = timezoneInSeconds / 3600;
-        int minutes = (timezoneInSeconds % 3600) / 60;
-        return String.format(Locale.US, "%+03d:%02d", hours, minutes);
+    // Method to classify heat index in Celsius
+    public static String classifyHeatIndex(double heatIndexCelsius) {
+        // Classify based on the given heat index value in Celsius and return the drawable path
+        if (heatIndexCelsius <= 21.1) {
+            return "safe"; // Corresponds to res/drawable/safe.png
+        } else if (heatIndexCelsius > 21.1 && heatIndexCelsius <= 26.7) {
+            return "caution"; // Corresponds to res/drawable/caution.png
+        } else if (heatIndexCelsius > 26.7 && heatIndexCelsius <= 32.2) {
+            return "ext_caution"; // Corresponds to res/drawable/ext_caution.png
+        } else if (heatIndexCelsius > 32.2 && heatIndexCelsius <= 39.4) {
+            return "danger"; // Corresponds to res/drawable/danger.png
+        } else {
+            return "extreme_danger"; // Corresponds to res/drawable/extreme_danger.png
+        }
     }
 
-    // Format a Unix timestamp to a readable time format (e.g., 5:00 AM)
-    private String formatTimestamp(long timestamp) {
-        SimpleDateFormat sdf = new SimpleDateFormat("h:mm a", Locale.US);
-        Date date = new Date(timestamp * 1000); // Convert seconds to milliseconds
-        return sdf.format(date);
-    }
-
-    // Calculate the dew point from temperature and humidity
-    private double calculateDewPoint(double temp, int humidity) {
-        return temp - ((100 - humidity) / 5.0);
-    }
 
 
 }
