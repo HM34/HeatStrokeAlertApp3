@@ -1,18 +1,5 @@
 package com.example.heatstrokealertapp;
 
-
-import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.Toast;
-import androidx.appcompat.app.AppCompatActivity;
-
-import java.util.ArrayList;
-
-
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -36,6 +23,11 @@ public class SearchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+
+        // Remove action bar title
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("");  // Removes title from action bar
+        }
 
         // Initialize views
         searchBar = findViewById(R.id.search_bar);
