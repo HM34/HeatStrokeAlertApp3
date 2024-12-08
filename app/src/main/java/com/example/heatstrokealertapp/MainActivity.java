@@ -52,6 +52,12 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton OpenSearchBtn,OpenNotificationBtn;
     private FrameLayout rightPopupLayout,leftPopupLayout;
 
+    private WeatherUtils weatherUtils;
+
+    private LocationUtils locationUtils;
+
+
+
 
 
     LinearLayoutManager linearLayoutManager;
@@ -67,20 +73,40 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Initialize the views
+        // Initialize all your views (TextViews and RecyclerViews)
         cityNameTextView = findViewById(R.id.CityName);
         tMinMaxTextView = findViewById(R.id.TMinMax);
         FeelsLikeTempTextView = findViewById(R.id.FeelsLikeTemp);
         HumidityTextView = findViewById(R.id.HumidityText);
         DewPointTextView = findViewById(R.id.DewPointText);
-
         VisibilityTextView = findViewById(R.id.VisibiltyText);
         PressureTextTextView = findViewById(R.id.PressureText);
-        SunriseTextView = findViewById(R.id.SunriseText);
-        SunSetTextView = findViewById(R.id.SunSetText);
         WindDegTextView = findViewById(R.id.WindDegText);
         WindSpeedTextView = findViewById(R.id.WindSpeedText);
         UvIndexTextTextView = findViewById(R.id.UvIndexText);
+        SunriseTextView = findViewById(R.id.SunriseText);
+        SunSetTextView = findViewById(R.id.SunSetText);
+
+        // Initialize views
+        cityNameTextView = findViewById(R.id.CityName);
+        hourlyWeatherRecyclerView = findViewById(R.id.recyclerViewHours);
+        recyclerView = findViewById(R.id.recyclerViewDays);
+
+        // Initialize LocationUtils
+        locationUtils = new LocationUtils((Context) this, (LocationUtils.OnLocationRetrievedListener) this);  // Pass 'this' to handle location retrieval
+
+        locationUtils.checkLocationPermission();
+
+        // Create an instance of WeatherUtils and pass necessary views
+        weatherUtils = new WeatherUtils(this, cityNameTextView, tMinMaxTextView, FeelsLikeTempTextView,
+                HumidityTextView, DewPointTextView, VisibilityTextView, PressureTextTextView, WindDegTextView,
+                WindSpeedTextView, UvIndexTextTextView, SunriseTextView, SunSetTextView, hourlyWeatherRecyclerView,
+                recyclerView);
+
+        // Fetch location and weather data
+        double latitude = 40.7128; // Example latitude
+        double longitude = -74.0060; // Example longitude
+        weatherUtils.fetchCityName(latitude, longitude);
 
         // Initialize RecyclerView
         recyclerView = findViewById(R.id.recyclerViewDays);
@@ -116,6 +142,9 @@ public class MainActivity extends AppCompatActivity {
                 // Call the handleClickAction method from NotificationsActivity
                 // This method is reused for the pop-up button action
                 RighthandleClickAction(this);
+            }
+
+            private void RighthandleClickAction(View.OnClickListener onClickListener) {
             }
         });
 
@@ -154,6 +183,8 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+
     // This method will be called when SearchActivity finishes and sends back the result
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -168,6 +199,8 @@ public class MainActivity extends AppCompatActivity {
             if (selectedText != null) {
                 // For example, set it in the TextView that displays the city name
                 cityNameTextView.setText(selectedText);
+                // Create an instance of WeatherUtils and call fetchWeatherData with the city name
+                weatherUtils.fetchWeatherData(selectedText);
             }
         }
     }
@@ -204,7 +237,7 @@ public class MainActivity extends AppCompatActivity {
                         double longitude = location.getLongitude();
 
                         // Now, get the city name using reverse geocoding
-                        getCityNameFromLocation(latitude, longitude);
+                        weatherUtils.fetchCityName(latitude, longitude);
                     } else {
                         getLocationUsingLocationManager();
                     }
@@ -242,7 +275,7 @@ public class MainActivity extends AppCompatActivity {
                             if (location != null) {
                                 double latitude = location.getLatitude();
                                 double longitude = location.getLongitude();
-                                getCityNameFromLocation(latitude, longitude); // Call geocoder to get city
+                                weatherUtils.fetchCityName(latitude, longitude);
                             }
                         }
 
@@ -267,143 +300,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // Get the city name from latitude and longitude using reverse geocoding
-    private void getCityNameFromLocation(double latitude, double longitude) {
-        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-        new Thread(() -> {
-            try {
-                List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
-                if (addresses != null && !addresses.isEmpty()) {
-                    cityName = addresses.get(0).getLocality(); // Update the global cityName variable
-                    runOnUiThread(() -> {
-                        cityNameTextView.setText(cityName);
 
-                        // today api call
-                        WeatherApi.getWeatherData(cityName, new WeatherApi.WeatherDataCallback() {
-                            @SuppressLint("SetTextI18n")
-                            @Override
-                            public void onSuccess(ArrayList<ArrayList<String>> hourlyWeatherDataList, ArrayList<ArrayList<String>> weatherDataList, String weatherMain, double temp, double feelsLike, double dewPoint, double pressure, int humidity, double Uv, double visibility, double windSpeed, int windDeg, String sunrise, String sunset, double minTempC, double maxTempC, double avgTempC, int avgHumidity) {
-
-                                UvIndexTextTextView.setText(Uv + "");
-                                tMinMaxTextView.setText(String.format(Locale.US, "H:%.1f° L:%.1f° %s", maxTempC, minTempC, weatherMain));
-                                FeelsLikeTempTextView.setText(feelsLike + "°C");
-                                HumidityTextView.setText(humidity + "%");
-                                DewPointTextView.setText(String.format(Locale.US, "The dew point is %.1f°C", dewPoint));
-                                VisibilityTextView.setText(visibility + "KM");
-                                PressureTextTextView.setText(pressure + "\n   hPa");
-                                WindDegTextView.setText(windDeg + "°");
-                                WindSpeedTextView.setText(windSpeed + " m/s");
-                                SunriseTextView.setText(sunrise);
-                                SunSetTextView.setText(sunset);
-
-
-                                // Initialize hourlyWeatherList to store HourlyWeather objects
-                                List<HourlyWeather> hourlyWeatherList = new ArrayList<>();
-
-                                // Assuming hourlyWeatherDataList is an ArrayList of ArrayList<String> where each inner ArrayList represents an hour's data
-                                for (ArrayList<String> hourData : hourlyWeatherDataList) {
-                                    // Ensure the hourData has at least 3 elements (time, temp, and humidity)
-                                    if (hourData.size() >= 3) {
-                                        String hourtime = hourData.get(0);  // Time (e.g., "4:30 AM")
-                                        double hourtempC = Double.parseDouble(hourData.get(1));  // Temperature (e.g., "29.0")
-                                        int hourheatindex = Integer.parseInt(hourData.get(2));  // Humidity (e.g., "60")
-                                        String IconPath = classifyHeatIndex(hourheatindex);
-
-                                        // Create a new HourlyWeather object and add it to the list
-                                        hourlyWeatherList.add(new HourlyWeather(hourtime, hourtempC, IconPath));
-                                    }
-                                }
-
-                                // Create the adapter with the populated hourlyWeatherList
-                                HourlyWeatherAdapter hourlyWeatherAdapter = new HourlyWeatherAdapter(hourlyWeatherList);
-                                hourlyWeatherRecyclerView.setAdapter(hourlyWeatherAdapter);
-
-
-
-
-                                // Convert weatherDataList to a list of WeatherItem objects
-                                List<WeatherItem> weatherItems = new ArrayList<>();
-                                for (ArrayList<String> dayData : weatherDataList) {
-                                    String date = dayData.get(0);
-                                    String avgTemp = dayData.get(1); // avg temperature, you could use this instead of max/min
-                                    double minTemp = Double.parseDouble(dayData.get(2));
-                                    double maxTemp = Double.parseDouble(dayData.get(3));
-                                    int forecastavgHumidity = Integer.parseInt((dayData.get(4)));
-                                    double heatIndex = calculateHeatIndex(Double.parseDouble(avgTemp),forecastavgHumidity);
-                                    String iconPath = classifyHeatIndex(heatIndex);
-
-
-                                    // Create a new WeatherItem for each day and add it to the list
-                                    weatherItems.add(new WeatherItem(date, maxTemp, minTemp, forecastavgHumidity, iconPath));
-                                }
-
-                                // Set up the RecyclerView with the adapter
-                                WeatherAdapter weatherAdapter = new WeatherAdapter(weatherItems);
-                                recyclerView.setAdapter(weatherAdapter);
-                            }
-
-
-                            @Override
-                            public void onError(String error) {
-                                Toast.makeText(MainActivity.this, "Weather API Error: " + error, Toast.LENGTH_SHORT).show();
-                            }
-                        });
-
-
-                    });
-                } else {
-                    cityName = "City not found"; // Default if not found
-                    runOnUiThread(() -> {
-                        cityNameTextView.setText(cityName);
-                    });
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-                cityName = "Geocoder error"; // Error message if geocoder fails
-                runOnUiThread(() -> {
-                    cityNameTextView.setText(cityName);
-                });
-            }
-        }).start();
-    }
-
-    // Method to classify heat index in Celsius
-    public static String classifyHeatIndex(double heatIndexCelsius) {
-        // Classify based on the given heat index value in Celsius and return the drawable path
-        if (heatIndexCelsius <= 21.1) {
-            return "safe"; // Corresponds to res/drawable/safe.png
-        } else if (heatIndexCelsius > 21.1 && heatIndexCelsius <= 26.7) {
-            return "caution"; // Corresponds to res/drawable/caution.png
-        } else if (heatIndexCelsius > 26.7 && heatIndexCelsius <= 32.2) {
-            return "ext_caution"; // Corresponds to res/drawable/ext_caution.png
-        } else if (heatIndexCelsius > 32.2 && heatIndexCelsius <= 39.4) {
-            return "danger"; // Corresponds to res/drawable/danger.png
-        } else {
-            return "extreme_danger"; // Corresponds to res/drawable/extreme_danger.png
-        }
-    }
-
-    public static double calculateHeatIndex(double temperatureCelsius, double humidity) {
-        // Applying the heat index formula for Celsius
-        double HI = -8.784694755 +
-                1.61139411 * temperatureCelsius +
-                2.338548838 * humidity -
-                0.14611605 * temperatureCelsius * humidity -
-                0.012308094 * Math.pow(temperatureCelsius, 2) -
-                0.016424828 * Math.pow(humidity, 2) +
-                0.002211732 * Math.pow(temperatureCelsius, 2) * humidity +
-                0.00072546 * Math.pow(humidity, 2) * temperatureCelsius -
-                0.00000358 * Math.pow(temperatureCelsius, 2) * Math.pow(humidity, 2);
-
-        // Return the calculated heat index in Celsius
-        return HI;
-    }
-
-    // This is the reused logic from NotificationsActivity
-    public void RighthandleClickAction(View.OnClickListener onClickListener) {
-        // Logic that was in NotificationsActivity (showing a Toast as an example)
-        Toast.makeText(MainActivity.this, classifyHeatIndex(Double.parseDouble("24")), Toast.LENGTH_SHORT).show();
-    }
-
+   
 
 }

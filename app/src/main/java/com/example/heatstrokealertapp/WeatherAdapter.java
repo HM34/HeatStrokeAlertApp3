@@ -46,6 +46,12 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherAdapter.WeatherV
         // Get the resource ID based on the icon name
         int iconResId = holder.itemView.getContext().getResources().getIdentifier(iconPath, "drawable", holder.itemView.getContext().getPackageName());
 
+        // Check if the resource ID is valid
+        if (iconResId == 0) {
+            // If the icon is not found, load a default icon
+            iconResId = R.drawable.safe;  // Replace with your default icon
+        }
+
         // Load the icon dynamically using Glide
         Glide.with(holder.weatherIcon.getContext())
                 .load(iconResId)  // Load the drawable resource by its ID
