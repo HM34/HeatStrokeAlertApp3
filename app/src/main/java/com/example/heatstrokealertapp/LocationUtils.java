@@ -35,7 +35,6 @@ public class LocationUtils {
     private Context context;
     private FusedLocationProviderClient fusedLocationClient;
     private LocationManager locationManager;
-
     private OnLocationRetrievedListener listener;
 
     public interface OnLocationRetrievedListener {
@@ -51,7 +50,7 @@ public class LocationUtils {
 
     public void checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions((MainActivity) context, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
+            requestLocationPermission();
         } else {
             getUserLocation();
         }
@@ -98,35 +97,28 @@ public class LocationUtils {
             boolean isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 
             if (!isGpsEnabled && !isNetworkEnabled) {
-                Toast.makeText(context, "Location services are disabled. Please enable them in settings.", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            try {
-                String provider = locationManager.getBestProvider(new Criteria(), true);
-                if (provider != null) {
-                    locationManager.requestSingleUpdate(provider, new LocationListener() {
-                        @Override
-                        public void onLocationChanged(@NonNull Location location) {
-                            if (location != null) {
-                                double latitude = location.getLatitude();
-                                double longitude = location.getLongitude();
-                                getCityName(latitude, longitude);
-                            }
-                        }
-
-                        @Override
-                        public void onStatusChanged(String provider, int status, Bundle extras) {}
-
-                        @Override
-                        public void onProviderEnabled(@NonNull String provider) {}
-
-                        @Override
-                        public void onProviderDisabled(@NonNull String provider) {}
-                    }, null);
+                Toast.makeText(context, "Location services are disabled. Please enable them.", Toast.LENGTH_LONG).show();
+            } else {
+                Criteria criteria = new Criteria();
+                String provider = locationManager.getBestProvider(criteria, true);
+                if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    return;
                 }
-            } catch (SecurityException e) {
-                Toast.makeText(context, "Location permission is required.", Toast.LENGTH_SHORT).show();
+                locationManager.requestSingleUpdate(provider, new LocationListener() {
+                    @Override
+                    public void onLocationChanged(@NonNull Location location) {
+                        getCityName(location.getLatitude(), location.getLongitude());
+                    }
+
+                    @Override
+                    public void onProviderDisabled(@NonNull String provider) {}
+
+                    @Override
+                    public void onProviderEnabled(@NonNull String provider) {}
+
+                    @Override
+                    public void onStatusChanged(String provider, int status, Bundle extras) {}
+                }, null);
             }
         }
     }
@@ -138,10 +130,16 @@ public class LocationUtils {
             if (addresses != null && !addresses.isEmpty()) {
                 String cityName = addresses.get(0).getLocality();
                 listener.onLocationRetrieved(latitude, longitude, cityName);
+            } else {
+                listener.onLocationRetrieved(latitude, longitude, "Unknown City");
             }
         } catch (IOException e) {
             e.printStackTrace();
-            Toast.makeText(context, "Failed to get city name", Toast.LENGTH_SHORT).show();
+            listener.onLocationRetrieved(latitude, longitude, "Unknown City");
         }
+    }
+
+    private void requestLocationPermission() {
+        ActivityCompat.requestPermissions((MainActivity) context, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
     }
 }
