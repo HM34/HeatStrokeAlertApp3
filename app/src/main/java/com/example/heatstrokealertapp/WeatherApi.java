@@ -105,6 +105,8 @@ public class WeatherApi {
                             double hourtempC = hourData.getDouble("temp_c");
                             int hourheatindex = hourData.getInt("heatindex_c");
 
+                            int isDay = hourData.getInt("is_day");
+
                             // Create a new ArrayList to hold the data for this hour
                             ArrayList<String> hourDataList = new ArrayList<>();
 
@@ -112,6 +114,7 @@ public class WeatherApi {
                             hourDataList.add(formattedTime);
                             hourDataList.add(String.valueOf(hourtempC)); // Convert double to String
                             hourDataList.add(String.valueOf(hourheatindex)); // Convert int to String
+                            hourDataList.add(String.valueOf(isDay)); // Convert int to String
 
                             // Add the hour's data to the main hourlyWeatherDataList
                             hourlyWeatherDataList.add(hourDataList);
@@ -133,7 +136,7 @@ public class WeatherApi {
                             JSONObject day = forecastday.getJSONObject(i);
 
                             String forecastdate = day.getString("date"); // Extract the date for each day
-                            double forecastavgTempC = day.getJSONObject("day").getDouble("avgtemp_c");
+                            double forecastavgTempf = day.getJSONObject("day").getDouble("mintemp_f");
                             double forecastminTempC = day.getJSONObject("day").getDouble("mintemp_c");
                             double forecastmaxTempC = day.getJSONObject("day").getDouble("maxtemp_c");
                             int forecastavgHumidity = day.getJSONObject("day").getInt("avghumidity");
@@ -141,7 +144,7 @@ public class WeatherApi {
                             // Create a new ArrayList for the current day's data
                             ArrayList<String> dayData = new ArrayList<>();
                             dayData.add(forecastdate);
-                            dayData.add(String.valueOf(forecastavgTempC));
+                            dayData.add(String.valueOf(forecastavgTempf));
                             dayData.add(String.valueOf(forecastminTempC));
                             dayData.add(String.valueOf(forecastmaxTempC));
                             dayData.add(String.valueOf(forecastavgHumidity));

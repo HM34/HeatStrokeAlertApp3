@@ -8,23 +8,14 @@ import android.util.Log;
 
 import java.util.ArrayList;
 
-
-import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
-
-import java.util.ArrayList;
-
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    private static final String DATABASE_NAME = "cities.db";
-    private static final int DATABASE_VERSION = 10; // Version 1, no need for upgrade yet
+    private static final String DATABASE_NAME = "cities.db"; // Database name
+    private static final int DATABASE_VERSION = 112; // Database version
 
-    private static final String TABLE_CITIES = "cities";
-    private static final String COLUMN_ID = "id";
-    private static final String COLUMN_NAME = "city_name";
+    private static final String TABLE_CITIES = "cities"; // Table name
+    private static final String COLUMN_ID = "id"; // Column for ID
+    private static final String COLUMN_NAME = "city_name"; // Column for city name
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -32,7 +23,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        // Create cities table if it doesn't exist
+        // Create the cities table if it doesn't exist
         String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_CITIES + " ("
                 + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + COLUMN_NAME + " TEXT)";
@@ -42,6 +33,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         insertCities(db);
     }
 
+    // Insert cities into the database (simplified)
     private void insertCities(SQLiteDatabase db) {
         String[] cities = {
                 "Dubai", "Abu Dhabi", "Sharjah", "Doha", "Muscat", "Manama",
@@ -66,37 +58,34 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "Dharan", "Al-Laith", "Al-Jouf", "Qatif", "Madinah", "Turaif", "Riyadh Province"
         };
 
-        for (String city : cities) {
-            String insertQuery = "INSERT INTO " + TABLE_CITIES + " (" + COLUMN_NAME + ") VALUES ('" + city + "')";
-            db.execSQL(insertQuery);
-            Log.d("DatabaseHelper", "Inserted city: " + city);  // Log each insertion
+        db.beginTransaction(); // Start transaction for better performance
+        try {
+            for (String city : cities) {
+                String insertQuery = "INSERT INTO " + TABLE_CITIES + " (" + COLUMN_NAME + ") VALUES (?)";
+                db.execSQL(insertQuery, new Object[]{city});
+                Log.d("DatabaseHelper", "Inserted city: " + city);
+            }
+            db.setTransactionSuccessful(); // Mark transaction as successful
+        } catch (Exception e) {
+            Log.e("DatabaseHelper", "Error inserting cities", e);
+        } finally {
+            db.endTransaction(); // End transaction
         }
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CITIES);
-        onCreate(db); // Recreate the table if needed
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CITIES); // Drop old table if exists
+        onCreate(db); // Recreate the table
     }
 
+    // Fetch all cities (simplified without any search query)
     public ArrayList<String> getCities(String query) {
         ArrayList<String> cityList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
+        String selectQuery = "SELECT " + COLUMN_NAME + " FROM " + TABLE_CITIES;
 
-        String selectQuery;
-        if (query.isEmpty()) {
-            selectQuery = "SELECT " + COLUMN_NAME + " FROM " + TABLE_CITIES;
-        } else {
-            selectQuery = "SELECT " + COLUMN_NAME + " FROM " + TABLE_CITIES + " WHERE " + COLUMN_NAME + " LIKE ?";
-        }
-
-        Cursor cursor;
-        if (query.isEmpty()) {
-            cursor = db.rawQuery(selectQuery, null);  // Fetch all cities
-        } else {
-            cursor = db.rawQuery(selectQuery, new String[]{"%" + query + "%"});  // Filter cities based on the query
-        }
-
+        Cursor cursor = db.rawQuery(selectQuery, null);
         if (cursor != null && cursor.moveToFirst()) {
             int columnIndex = cursor.getColumnIndex(COLUMN_NAME);
             while (!cursor.isAfterLast()) {
@@ -105,9 +94,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 cursor.moveToNext();
             }
             cursor.close();
+        } else {
+            Log.d("DatabaseHelper", "No cities found.");
         }
         db.close();
-
         return cityList;
     }
 }

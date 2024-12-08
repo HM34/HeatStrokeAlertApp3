@@ -53,7 +53,7 @@ dependencies {
     implementation ("com.google.android.gms:play-services-location:18.0.0")
     implementation ("androidx.recyclerview:recyclerview:1.2.1")
     implementation ("com.github.bumptech.glide:glide:4.13.0")
-    annotationProcessor  ("com.github.bumptech.glide:compiler:4.13.0")
+    annotationProcessor ("com.github.bumptech.glide:compiler:4.13.0")
     implementation ("androidx.drawerlayout:drawerlayout:1.1.1")
     implementation ("androidx.appcompat:appcompat:1.4.0")
 }
