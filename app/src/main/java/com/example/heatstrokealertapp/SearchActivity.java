@@ -1,82 +1,56 @@
 package com.example.heatstrokealertapp;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.util.Log;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 
 public class SearchActivity extends AppCompatActivity {
 
-    private EditText searchBar;
-    private ListView cityListView;
-    private DatabaseHelper dbHelper;
-    private ArrayAdapter<String> cityAdapter;
-    private ArrayList<String> currentCities;
+    private ListView cityListView; // ListView to display the cities
+    private DatabaseHelper dbHelper; // Database helper to fetch cities
+    private ArrayAdapter<String> cityAdapter; // Adapter for ListView
+    private ArrayList<String> currentCities; // List of cities
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-        // Remove action bar title
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("");  // Removes title from action bar
-        }
-
-        // Initialize views
-        searchBar = findViewById(R.id.search_bar);
+        // Initialize views and objects
         cityListView = findViewById(R.id.city_list);
-
-        // Initialize the database helper and currentCities list
         dbHelper = new DatabaseHelper(this);
         currentCities = new ArrayList<>();
 
-        // Set up the adapter for ListView
+        // Set up the adapter to bind data to ListView
         cityAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, currentCities);
         cityListView.setAdapter(cityAdapter);
 
-        // Fetch and display all cities initially
+        // Fetch cities from database and update the ListView
+        Log.d("SearchActivity", "Fetching all cities...");
         currentCities.addAll(dbHelper.getCities(""));  // Pass empty string to fetch all cities
-        cityAdapter.notifyDataSetChanged();
+        cityAdapter.notifyDataSetChanged();  // Notify the adapter to refresh the ListView
 
-        // Listen to search input and update list
-        searchBar.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
-            }
+        // Set an item click listener for the ListView
+        cityListView.setOnItemClickListener((parent, view, position, id) -> {
+            // Get the selected city from the ListView
+            String selectedCity = currentCities.get(position);
 
-            @Override
-            public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
-                String query = searchBar.getText().toString().trim();
+            // Create an Intent to send the selected city back to MainActivity
+            Intent resultIntent = new Intent();
+            resultIntent.putExtra("selected_text", selectedCity);  // Add the selected city to the Intent
 
-                // If query is empty, show all cities
-                if (query.isEmpty()) {
-                    ArrayList<String> cities = dbHelper.getCities("");  // Pass empty string for all cities
-                    currentCities.clear();
-                    currentCities.addAll(cities);
-                    cityAdapter.notifyDataSetChanged();
-                } else {
-                    // Filter cities based on the query
-                    ArrayList<String> cities = dbHelper.getCities(query);
-                    if (cities.isEmpty()) {
-                        Toast.makeText(SearchActivity.this, "No cities found!", Toast.LENGTH_SHORT).show();
-                    }
+            // Set the result to RESULT_OK and return the result
+            setResult(RESULT_OK, resultIntent);
 
-                    currentCities.clear();
-                    currentCities.addAll(cities);
-                    cityAdapter.notifyDataSetChanged();  // Refresh ListView
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-            }
+            // Close the SearchActivity and return to MainActivity
+            finish();
         });
     }
 }

@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
+    private static final int REQUEST_CODE_SEARCH = 1;
     // Declare views at class level to make them accessible in the callback
     private TextView cityNameTextView, tMinMaxTextView, FeelsLikeTempTextView, HumidityTextView, VisibilityTextView, PressureTextTextView, SunriseTextView, SunSetTextView, WindDegTextView, WindSpeedTextView, UvIndexTextTextView, DewPointTextView;
     private RecyclerView recyclerView, hourlyWeatherRecyclerView;
@@ -50,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private ImageButton OpenSearchBtn,OpenNotificationBtn;
     private FrameLayout rightPopupLayout,leftPopupLayout;
+
+
 
     LinearLayoutManager linearLayoutManager;
 
@@ -117,13 +120,19 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        // Other action for the second button
+        // Open SearchActivity and wait for result when the search button is clicked
         OpenSearchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Slide the pop-up in from the right
-                leftPopupLayout.setVisibility(View.VISIBLE);
-                drawerLayout.openDrawer(leftPopupLayout);
+                try {
+                    // Launch SearchActivity and wait for result
+                    Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+                    startActivityForResult(intent, REQUEST_CODE_SEARCH);
+                } catch (Exception e) {
+                    // Show a Toast message if an error occurs
+                    Toast.makeText(MainActivity.this, "Failed to open SearchActivity: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -143,6 +152,24 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
+    }
+
+    // This method will be called when SearchActivity finishes and sends back the result
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Check if the result is from SearchActivity
+        if (requestCode == REQUEST_CODE_SEARCH && resultCode == RESULT_OK) {
+            // Get the selected text from SearchActivity using the key you used to send it back
+            String selectedText = data.getStringExtra("selected_text");
+
+            // Do something with the selected text, like setting it in a TextView
+            if (selectedText != null) {
+                // For example, set it in the TextView that displays the city name
+                cityNameTextView.setText(selectedText);
+            }
+        }
     }
 
     // Handle the result of the permission request
