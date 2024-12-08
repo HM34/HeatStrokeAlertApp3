@@ -28,6 +28,14 @@
 
         <!-- Main Activity -->
         <activity android:name=".MainActivity" />
+
+        <!-- SearchActivity declaration (no need for an intent filter) -->
+        <activity
+            android:name=".SearchActivity"
+            android:exported="true"
+            android:theme="@style/Theme.AppCompat.Light.Dialog">
+        </activity>
+
     </application>
 
 </manifest>
