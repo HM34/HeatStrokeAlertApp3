@@ -14,6 +14,7 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -24,6 +25,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -99,25 +101,43 @@ public class MainActivity extends AppCompatActivity {
         leftPopupLayout = findViewById(R.id.search_popup);
 
 
-        // Open the pop-up when the first button is clicked
+        // notificationRecyclerView
+        RecyclerView notificationRecyclerView = findViewById(R.id.recycler_view_notifications);
+        notificationRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+// Sample notifications
+        List<NotificationItem> notifications = new ArrayList<>();
+        notifications.add(new NotificationItem("10 minutes ago", "A sunny day in your location, consider wearing UV protection", R.drawable.caution));
+        notifications.add(new NotificationItem("1 day ago", "A cloudy day will occur all day long, don't worry about the heat of the sun", R.drawable.safe));
+        notifications.add(new NotificationItem("2 days ago", "Potential for rain today is 84%, don't forget your umbrella.", R.drawable.safe));
+
+// Attach adapter
+        NotificationAdapter adapter = new NotificationAdapter(notifications);
+        notificationRecyclerView.setAdapter(adapter);
+
         OpenNotificationBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Slide the pop-up in from the right
-                rightPopupLayout.setVisibility(View.VISIBLE);
-                drawerLayout.openDrawer(rightPopupLayout);
+                // Show the right drawer (notification pop-up)
+                if (drawerLayout != null) {
+                    rightPopupLayout.setVisibility(View.VISIBLE);
+                    drawerLayout.openDrawer(GravityCompat.END); // Opens from the right
+                } else {
+                    Log.e("MainActivity", "DrawerLayout or rightPopupLayout is null!");
+                }
             }
         });
 
+
         // Handle clicks inside the pop-up using the reusable logic from NotificationsActivity
-        rightPopupLayout.findViewById(R.id.bell_icon).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Call the handleClickAction method from NotificationsActivity
-                // This method is reused for the pop-up button action
-                RighthandleClickAction(this);
-            }
-        });
+//        rightPopupLayout.findViewById(R.id.bell_icon).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                // Call the handleClickAction method from NotificationsActivity
+//                // This method is reused for the pop-up button action
+//                RighthandleClickAction(this);
+//            }
+//        });
 
 
         // Open SearchActivity and wait for result when the search button is clicked
